@@ -1,0 +1,120 @@
+name: Build ZH release APK
+
+# 汉化版 APK：手动触发或推送 v* 标签时构建并发布 GitHub Release
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-zh-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # 固定签名（密钥随仓库发布，便于覆盖安装；社区 fork 常用方案）
+      KEYSTORE_FILE: android-keystore/release.keystore
+      STORE_PASSWORD: clipvault-zh-2026
+      KEY_ALIAS: clipvault-zh
+      KEY_PASSWORD: clipvault-zh-2026
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses || true
+
+      - name: Resolve version
+        id: ver
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF_NAME}"
+          else
+            TAG="v$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts | head -1)-zh-dev"
+          fi
+          VER="${TAG#v}"
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${VER}" >> "$GITHUB_OUTPUT"
+          echo "apk_name=ClipVault-zh-${TAG}.apk" >> "$GITHUB_OUTPUT"
+          echo "Resolved tag=${TAG} version=${VER}"
+
+      - name: Write signing config
+        run: |
+          if [ -f "$KEYSTORE_FILE" ]; then
+            {
+              echo "CLIPVAULT_STORE_FILE=$KEYSTORE_FILE"
+              echo "CLIPVAULT_STORE_PASSWORD=$STORE_PASSWORD"
+              echo "CLIPVAULT_KEY_ALIAS=$KEY_ALIAS"
+              echo "CLIPVAULT_KEY_PASSWORD=$KEY_PASSWORD"
+            } > local.properties
+            echo "Using fixed release keystore"
+          else
+            echo "Keystore missing — will fall back to debug signing"
+          fi
+
+      - name: Build release APK
+        run: ./gradlew :app:assembleRelease --no-daemon --stacktrace
+
+      - name: Rename APK
+        run: |
+          SRC="app/build/outputs/apk/release/app-release.apk"
+          DST="app/build/outputs/apk/release/${{ steps.ver.outputs.apk_name }}"
+          test -f "$SRC"
+          cp "$SRC" "$DST"
+          ls -lh "$SRC" "$DST"
+          echo "APK_PATH=$DST" >> "$GITHUB_ENV"
+          echo "APK_NAME=${{ steps.ver.outputs.apk_name }}" >> "$GITHUB_ENV"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.ver.outputs.apk_name }}
+          path: ${{ env.APK_PATH }}
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: ClipVault 汉化版 ${{ steps.ver.outputs.tag }}
+          draft: false
+          prerelease: false
+          files: ${{ env.APK_PATH }}
+          body: |
+            ## ClipVault 简体中文汉化版 ${{ steps.ver.outputs.tag }}
+
+            基于 [bilboo00/ClipVault](https://github.com/bilboo00/ClipVault) **v1.2.1**，界面文案已汉化。
+
+            ### 下载
+            - `${{ steps.ver.outputs.apk_name }}`
+            - 架构：`arm64-v8a` / `armeabi-v7a`
+            - 最低系统：Android 8.0（API 26）
+
+            ### 签名说明
+            - 使用本仓库固定签名密钥（`android-keystore/release.keystore`）
+            - 同一签名的汉化版之间可**覆盖安装**，无需卸载
+            - 若设备上已装**官方原版**（签名不同），需先卸载再装本汉化版
+
+            ### 汉化范围
+            启动引导、首页、搜索、设置、详情、合集/标签/片段、统计、通知、
+            快捷磁贴、无障碍说明、悬浮气泡、桌面小组件、文本转换等。
+            品牌名 ClipVault 与 URL/JSON/Base64 等技术名词保留原文。
+
+            ### 构建
+            GitHub Actions：`Build ZH release APK` @ `${{ github.sha }}`
