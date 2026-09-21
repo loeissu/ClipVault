@@ -46,7 +46,7 @@ object TextTransformer {
         return try {
             TransformationResult.Success(URLEncoder.encode(text, "UTF-8"))
         } catch (e: Exception) {
-            TransformationResult.Failure("Failed to encode URL: ${e.message}")
+            TransformationResult.Failure("URL 编码失败：${e.message}")
         }
     }
 
@@ -54,7 +54,7 @@ object TextTransformer {
         return try {
             TransformationResult.Success(URLDecoder.decode(text, "UTF-8"))
         } catch (e: Exception) {
-            TransformationResult.Failure("Failed to decode URL: ${e.message}")
+            TransformationResult.Failure("URL 解码失败：${e.message}")
         }
     }
 
@@ -63,7 +63,7 @@ object TextTransformer {
             val encoded = Base64.encodeToString(text.toByteArray(), Base64.NO_WRAP)
             TransformationResult.Success(encoded)
         } catch (e: Exception) {
-            TransformationResult.Failure("Failed to encode Base64: ${e.message}")
+            TransformationResult.Failure("Base64 编码失败：${e.message}")
         }
     }
 
@@ -72,7 +72,7 @@ object TextTransformer {
             val decoded = String(Base64.decode(text.trim(), Base64.DEFAULT))
             TransformationResult.Success(decoded)
         } catch (e: Exception) {
-            TransformationResult.Failure("Failed to decode Base64: ${e.message}")
+            TransformationResult.Failure("Base64 解码失败：${e.message}")
         }
     }
 
@@ -82,7 +82,7 @@ object TextTransformer {
             val formatted = json.toString(2)
             TransformationResult.Success(formatted)
         } catch (e: Exception) {
-            TransformationResult.Failure("Invalid JSON: ${e.message}")
+            TransformationResult.Failure("JSON 无效：${e.message}")
         }
     }
 
@@ -91,23 +91,23 @@ object TextTransformer {
             val json = JSONObject(text)
             TransformationResult.Success(json.toString())
         } catch (e: Exception) {
-            TransformationResult.Failure("Invalid JSON: ${e.message}")
+            TransformationResult.Failure("JSON 无效：${e.message}")
         }
     }
 
     enum class Type(val label: String, val transform: (String) -> TransformationResult) {
         UPPERCASE("UPPERCASE", { TextTransformer.uppercase(it) }),
         LOWERCASE("lowercase", { TextTransformer.lowercase(it) }),
-        TITLE_CASE("Title Case", { TextTransformer.titleCase(it) }),
-        SENTENCE_CASE("Sentence case", { TextTransformer.sentenceCase(it) }),
-        TRIM("Trim Whitespace", { TextTransformer.trimWhitespace(it) }),
-        REMOVE_LINE_BREAKS("Remove Line Breaks", { TextTransformer.removeLineBreaks(it) }),
-        ADD_LINE_BREAKS("Add Line Breaks", { TextTransformer.addLineBreaks(it) }),
-        URL_ENCODE("URL Encode", { TextTransformer.urlEncode(it) }),
-        URL_DECODE("URL Decode", { TextTransformer.urlDecode(it) }),
-        BASE64_ENCODE("Base64 Encode", { TextTransformer.base64Encode(it) }),
-        BASE64_DECODE("Base64 Decode", { TextTransformer.base64Decode(it) }),
-        JSON_FORMAT("Format JSON", { TextTransformer.jsonFormat(it) }),
-        JSON_MINIFY("Minify JSON", { TextTransformer.jsonMinify(it) });
+        TITLE_CASE("每个单词首字母大写", { TextTransformer.titleCase(it) }),
+        SENTENCE_CASE("句首字母大写", { TextTransformer.sentenceCase(it) }),
+        TRIM("去掉首尾空白", { TextTransformer.trimWhitespace(it) }),
+        REMOVE_LINE_BREAKS("删除换行", { TextTransformer.removeLineBreaks(it) }),
+        ADD_LINE_BREAKS("添加换行", { TextTransformer.addLineBreaks(it) }),
+        URL_ENCODE("URL 编码", { TextTransformer.urlEncode(it) }),
+        URL_DECODE("URL 解码", { TextTransformer.urlDecode(it) }),
+        BASE64_ENCODE("Base64 编码", { TextTransformer.base64Encode(it) }),
+        BASE64_DECODE("Base64 解码", { TextTransformer.base64Decode(it) }),
+        JSON_FORMAT("格式化 JSON", { TextTransformer.jsonFormat(it) }),
+        JSON_MINIFY("压缩 JSON", { TextTransformer.jsonMinify(it) });
     }
 }

@@ -54,7 +54,7 @@ fun StatsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Statistics") },
+                title = { Text("统计") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
@@ -82,13 +82,13 @@ fun StatsScreen(
                     ) {
                         StatCard(
                             icon = Icons.Outlined.ContentPaste,
-                            label = "Total clips",
+                            label = "条目总数",
                             value = "${state.totalCount}",
                             modifier = Modifier.weight(1f)
                         )
                         StatCard(
                             icon = Icons.Outlined.Today,
-                            label = "Today",
+                            label = "今天",
                             value = "${state.todayCount}",
                             modifier = Modifier.weight(1f)
                         )
@@ -101,13 +101,13 @@ fun StatsScreen(
                     ) {
                         StatCard(
                             icon = Icons.Outlined.CalendarViewWeek,
-                            label = "This week",
+                            label = "本周",
                             value = "${state.weekCount}",
                             modifier = Modifier.weight(1f)
                         )
                         StatCard(
                             icon = Icons.Outlined.Storage,
-                            label = "Storage",
+                            label = "存储",
                             value = formatBytes(state.totalBytes),
                             modifier = Modifier.weight(1f)
                         )
@@ -118,7 +118,7 @@ fun StatsScreen(
                     item {
                         Spacer(Modifier.height(8.dp))
                         Text(
-                            "By type",
+                            "按类型",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold
                         )

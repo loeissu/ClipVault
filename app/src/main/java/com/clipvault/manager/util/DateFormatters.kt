@@ -27,10 +27,10 @@ private const val WEEK_MS = 7 * DAY_MS
 fun relativeTime(now: Long, ts: Long): String {
     val diff = now - ts
     return when {
-        diff < MINUTE_MS -> "just now"
-        diff < HOUR_MS -> "${diff / MINUTE_MS}m ago"
-        diff < DAY_MS -> "${diff / HOUR_MS}h ago"
-        diff < WEEK_MS -> "${diff / DAY_MS}d ago"
+        diff < MINUTE_MS -> "刚刚"
+        diff < HOUR_MS -> "${diff / MINUTE_MS} 分钟前"
+        diff < DAY_MS -> "${diff / HOUR_MS} 小时前"
+        diff < WEEK_MS -> "${diff / DAY_MS} 天前"
         else -> shortDateFormat().format(Date(ts))
     }
 }

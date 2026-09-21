@@ -62,14 +62,14 @@ fun LockScreen(
             }
             Spacer(modifier = Modifier.height(28.dp))
             Text(
-                text = "Vault locked",
+                text = "已锁定",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = if (canAuthenticate) "Unlock to view your saved clips" else "Biometrics not available",
+                text = if (canAuthenticate) "解锁后查看已保存的条目" else "当前无法使用生物识别",
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 textAlign = TextAlign.Center
@@ -80,7 +80,7 @@ fun LockScreen(
                 enabled = canAuthenticate,
                 modifier = Modifier.fillMaxWidth(0.6f)
             ) {
-                Text(if (canAuthenticate) "Unlock" else "Unavailable")
+                Text(if (canAuthenticate) "解锁" else "不可用")
             }
         }
     }

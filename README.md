@@ -1,174 +1,115 @@
-# ClipVault
+# ClipVault 汉化版
 
 <p align="left">
   <img src="store_assets/icon_512.png" alt="ClipVault" width="96" height="96">
 </p>
 
-**Local-first clipboard manager for Android.** Capture, organize, search, and restore everything you copy — with zero cloud dependency.
+**Android 本地优先剪贴板管理器（中文汉化版）。** 捕获、整理、搜索并恢复你复制的一切内容 — 不依赖云端。
 
-[![Release](https://img.shields.io/github/v/release/bilboo00/ClipVault?style=flat-square)](https://github.com/bilboo00/ClipVault/releases/latest)
-[![License](https://img.shields.io/github/license/bilboo00/ClipVault?style=flat-square)](LICENSE)
+> 本仓库是 [bilboo00/ClipVault](https://github.com/bilboo00/ClipVault) 的中文汉化 fork，基于上游 **v1.2.1**。功能逻辑与上游一致，界面文案已本地化为简体中文。
+
+[![Upstream](https://img.shields.io/badge/upstream-bilboo00%2FClipVault-blue?style=flat-square)](https://github.com/bilboo00/ClipVault)
+[![Base](https://img.shields.io/badge/base-v1.2.1-informational?style=flat-square)](https://github.com/bilboo00/ClipVault/releases/tag/v1.2.1)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android%208.0%2B-3DDC84?style=flat-square&logo=android)](https://github.com/bilboo00/ClipVault)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.0.20-7F52FF?style=flat-square&logo=kotlin)](https://kotlinlang.org)
-[![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?style=flat-square&logo=jetpackcompose)](https://developer.android.com/jetpack/compose)
-[![Stars](https://img.shields.io/github/stars/bilboo00/ClipVault?style=flat-square)](https://github.com/bilboo00/ClipVault/stargazers)
-[![Issues](https://img.shields.io/github/issues/bilboo00/ClipVault?style=flat-square)](https://github.com/bilboo00/ClipVault/issues)
-[![Discussions](https://img.shields.io/github/discussions/bilboo00/ClipVault?style=flat-square)](https://github.com/bilboo00/ClipVault/discussions)
-[![Open Source](https://img.shields.io/badge/Open%20Source-MIT-2EA44F?style=flat-square)](LICENSE)
 
 ---
 
-## Why ClipVault?
+## 为什么选择 ClipVault？
 
-Most clipboard managers lock your data behind a subscription, track you, or send your text to the cloud. ClipVault stores **everything on-device**, in a private SQLite database — and lets you organise, transform, and lock down sensitive clips with a modern Material 3 interface.
+多数剪贴板管理器把数据锁在订阅后面、追踪你，或把文本上传到云端。ClipVault 将**全部数据保存在本机**的私有 SQLite 数据库中，并用现代 Material 3 界面帮你整理、转换，以及锁定敏感内容。
 
-## Features
+## 功能
 
-### Capture & history
-- Automatic clipboard capture with a foreground monitoring service
-- Full-text search across every clip you've ever copied
-- Pin important clips to prevent automatic pruning
-- Smart content detection (URL, email, phone, code, JSON)
-- Duplicate detection to keep your history clean
+### 捕获与历史
+- 前台监控服务自动捕获剪贴板
+- 对全部复制过的条目进行全文搜索
+- 置顶重要条目，防止自动清理
+- 智能识别内容类型（链接、邮件、电话、验证码、JSON）
+- 重复检测，保持历史整洁
 
-### Organisation
-- **Tags** — colour-coded labels (10-color palette) for quick grouping
-- **Collections** — bundle related clips into named sets
-- **Notes** — attach rich Markdown notes to any clip
-- **Temporary clips** — auto-expire after a time or after N uses
+### 整理
+- **标签** — 10 色色板，快速归类
+- **合集** — 将相关条目打包成命名集合
+- **备注** — 为任意条目附加 Markdown 备注
+- **临时条目** — 按时间或使用次数自动过期
 
-### Productivity
-- **Text transformations** — 13 built-in transforms (uppercase, lowercase, slugify, JSON pretty-print, base64, ROT13, etc.) with live preview
-- **Paste queue** — store multiple snippets and paste them in order
-- **Snippets** — reusable text shortcuts with keyword expansion
-- **Export** — your history as CSV, Markdown, or plain text
+### 效率
+- **文本转换** — 多种内置转换（大写、首字母大写、去空白、URL/Base64 编解码、JSON 格式化等），带实时预览
+- **粘贴队列** — 存放多条片段并按顺序粘贴
+- **片段** — 可复用文本快捷方式，支持关键字展开
+- **导出** — 历史可导出为 CSV、Markdown 或纯文本
 
-### Integration
-- **Enhanced link previews** — OpenGraph metadata for URLs
-- **Share to ClipVault** — capture text from any app via Android's share sheet
-- **Deep linking** — `clipvault://` and `https://clipvault.app` URI schemes
-- **Floating bubble overlay** — quick access from any screen
-- **Shake-to-open** gesture
-- **Home screen widget** and **Quick Settings tile**
-- **Biometric lock** — protect sensitive clips with fingerprint / face unlock
+### 集成
+- **增强链接预览** — URL 的 OpenGraph 元数据
+- **分享到 ClipVault** — 通过系统分享面板从任意应用捕获文本
+- **深链接** — `clipvault://` 与 `https://clipvault.app` URI
+- **悬浮气泡** — 任意界面快速访问
+- **摇一摇打开** 手势
+- **桌面小组件** 与 **快捷设置磁贴**
+- **生物识别锁定** — 用指纹 / 面容保护敏感条目
 
-### Design
-- Material 3 with dynamic colour and AMOLED black
-- Smooth motion and micro-interactions
-- Haptic feedback tuned for each action
+### 设计
+- Material 3，支持动态取色与 AMOLED 纯黑
+- 流畅动效与微交互
+- 针对不同操作调校的触感反馈
 
-## Screenshots
+## 系统要求
 
-<p align="center">
-  <img src="store_assets/feature_graphic.png" alt="ClipVault feature graphic" width="720">
-</p>
+- **Android 8.0（API 26）及以上**
+- 从源码构建需要 **Java 21**
 
-## Requirements
+## 下载
 
-- **Android 8.0 (API 26) or higher**
-- **Java 21** for building from source
+请到本仓库或上游的 [**Releases**](https://github.com/bilboo00/ClipVault/releases) 获取 APK。  
+汉化版请优先使用本 fork 的 Releases（若有）。
 
-## Download
-
-Grab the latest APK from the [**Releases**](https://github.com/bilboo00/ClipVault/releases/latest) page.
-
-## Build from source
+## 从源码构建
 
 ```bash
-git clone https://github.com/bilboo00/ClipVault.git
+git clone https://github.com/loeissu/ClipVault.git
 cd ClipVault
-
-# Debug APK
-./gradlew :app:assembleDebug
-
-# Release APK
+git checkout zh/main
 ./gradlew :app:assembleRelease
-
-# Release AAB (for Play Store)
-./gradlew :app:bundleRelease
 ```
 
-> **Note:** `assembleRelease`/`bundleRelease` are only signed if `local.properties`
-> defines the keystore (`CLIPVAULT_STORE_FILE`, `CLIPVAULT_STORE_PASSWORD`,
-> `CLIPVAULT_KEY_ALIAS`, `CLIPVAULT_KEY_PASSWORD`). Without them, the build
-> produces an unsigned APK silently. The APKs attached to GitHub Releases are
-> signed with the project release key.
+## 汉化说明
 
-## Architecture
+| 范围 | 状态 |
+|------|------|
+| 底部导航、首页、搜索、设置、详情 | 已汉化 |
+| 引导页、合集 / 标签 / 片段、统计 | 已汉化 |
+| 通知、快捷磁贴、无障碍说明、悬浮气泡提示 | 已汉化 |
+| 文本转换、类型徽章、相对时间、错误提示 | 已汉化 |
+| SQL / Room 注解 / 函数名 / 日志标签 | 保持英文（避免破坏编译） |
+| 品牌名 ClipVault、技术名词 URL/JSON/Base64/OTP | 保持原文 |
 
-| Layer       | Stack                                                   |
-|-------------|---------------------------------------------------------|
-| Language    | Kotlin 2.0.20                                           |
-| UI          | Jetpack Compose + Material 3                            |
-| Pattern     | MVVM + Unidirectional Data Flow                         |
-| DI          | Hilt with KSP                                           |
-| Database    | Room (SQLite)                                           |
-| Preferences | DataStore Preferences                                   |
-| Concurrency | Kotlin Coroutines + Flow                                |
-| Services    | Foreground, Accessibility, Tile, Bubble, Glance Widget  |
+**术语对照（审校后统一）：**
 
-## Project structure
+| 英文 | 中文 | 说明 |
+|------|------|------|
+| clip | 条目 | 剪贴板历史中的一条记录 |
+| pin / pinned | 置顶 | 不译作「固定」 |
+| collections | 合集 | 相关条目的文件夹式分组 |
+| tags | 标签 | 跨类型标记 |
+| snippets | 片段 | 可复用文本模板 |
+| paste queue | 粘贴队列 | 按顺序粘贴 |
+| mask sensitive content | 隐藏敏感内容 | 通知/搜索中不显示正文 |
+| auto-delete after | 自动删除时间 | 下拉选择保留时长 |
+| Organized | 归类 | 详情页展示所属标签/合集 |
 
-```
-app/src/main/java/com/clipvault/manager/
-├── app/              # Application and Activity entry points
-├── data/             # Repository, DAO, entities, preferences, export
-│   ├── export/       # CSV, Markdown, Plain Text exporters
-│   ├── local/        # Room entities and DAOs
-│   ├── preferences/  # DataStore-backed settings
-│   ├── repository/   # Domain repositories
-│   └── security/     # Biometric authentication wrapper
-├── di/               # Hilt dependency injection modules
-├── domain/           # Domain models and business logic
-├── haptic/           # Haptic feedback utilities
-├── sensor/           # Shake detection
-├── service/          # Background services and receivers
-├── ui/               # Compose screens, components, theme
-└── widget/           # Glance home screen widget
+系统字符串在 `app/src/main/res/values/strings.xml`；Compose 文案在对应 `*Screen.kt`。重新应用（仅替换完整字符串字面量）：
+
+```bash
+python tools/apply-zh.py
+python tools/apply-zh-fix.py
 ```
 
-## Privacy
+## 致谢
 
-Your clipboard never leaves your device. ClipVault:
-
-- Stores every clip in a **private on-device SQLite database**
-- Has **no analytics, tracking, or telemetry**
-- Requests **no network permissions** (except optional URL title fetching via `INTERNET` for link previews)
-- Requires **no account** to use
-
-The full list of permissions, with justifications, is in [PRIVACY_POLICY.md](PRIVACY_POLICY.md).
-
-## Contributing
-
-Contributions are welcome! See the [open issues](https://github.com/bilboo00/ClipVault/issues) for ideas, or open a [discussion](https://github.com/bilboo00/ClipVault/discussions) to propose something new.
-
-When you're ready to send a pull request:
-1. Fork the repo and create a feature branch
-2. Keep changes focused; one feature per PR
-3. Match the existing code style (Kotlin official + Compose conventions)
-4. Test on a device or emulator running Android 8.0+
-
-## Roadmap
-
-- [x] Tags & collections
-- [x] Text transformations
-- [x] Paste queue
-- [x] Clip notes
-- [x] Enhanced link previews
-- [x] Share-to-ClipVault
-- [x] Deep linking
-- [x] Temporary clips
-- [x] Biometric lock
-- [x] Duplicate detection
-- [x] Export formats
-- [ ] Cloud sync (opt-in, E2E encrypted)
-- [ ] Cross-device clipboard via LAN
-- [ ] Wear OS companion
+- 上游项目：[bilboo00/ClipVault](https://github.com/bilboo00/ClipVault)（MIT）
+- 技术栈：Kotlin · Jetpack Compose · Material 3 · Room
 
 ## License
 
-Released under the [MIT License](LICENSE).
-
-## Star history
-
-If ClipVault is useful to you, a star helps others find it. ⭐
+MIT，与上游一致。

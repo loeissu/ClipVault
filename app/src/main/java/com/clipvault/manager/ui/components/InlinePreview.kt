@@ -61,21 +61,21 @@ fun InlinePreview(
         ClipType.COLOR_HEX -> ColorSwatch(content, modifier)
         ClipType.PHONE -> ActionChip(
             text = content,
-            label = "Call",
+            label = "拨打",
             icon = Icons.Outlined.Call,
             onClick = { runCatching { context.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:$content"))) } },
             modifier = modifier
         )
         ClipType.EMAIL -> ActionChip(
             text = content,
-            label = "Email",
+            label = "邮箱",
             icon = Icons.Outlined.Email,
             onClick = { runCatching { context.startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$content"))) } },
             modifier = modifier
         )
         ClipType.URL -> ActionChip(
             text = content,
-            label = "Open",
+            label = "打开",
             icon = Icons.Outlined.OpenInBrowser,
             onClick = { runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(content))) } },
             modifier = modifier

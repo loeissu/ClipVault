@@ -125,8 +125,8 @@ fun ClipDetailScreen(
             when (event) {
                 is ClipDetailEvent.Deleted -> {
                     snackbarHostState.show(
-                        message = "Clip deleted",
-                        actionLabel = "Undo"
+                        message = "条目已删除",
+                        actionLabel = "撤销"
                     )?.let { viewModel.undoDelete(event.entity) }
                 }
             }
@@ -140,7 +140,7 @@ fun ClipDetailScreen(
                 title = { },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "返回")
                     }
                 },
                 actions = {
@@ -153,7 +153,7 @@ fun ClipDetailScreen(
                         Icon(
                             imageVector = if (state.clip?.isFavorite == true)
                                 Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                            contentDescription = "Favorite",
+                            contentDescription = "收藏",
                             tint = if (state.clip?.isFavorite == true)
                                 MaterialTheme.colorScheme.error
                             else MaterialTheme.colorScheme.onSurfaceVariant
@@ -168,7 +168,7 @@ fun ClipDetailScreen(
                         Icon(
                             imageVector = if (state.clip?.isPinned == true)
                                 Icons.Filled.PushPin else Icons.Outlined.PushPin,
-                            contentDescription = "Pin",
+                            contentDescription = "置顶",
                             tint = if (state.clip?.isPinned == true)
                                 MaterialTheme.colorScheme.primary
                             else MaterialTheme.colorScheme.onSurfaceVariant
@@ -185,7 +185,7 @@ fun ClipDetailScreen(
         if (clip == null) {
             Box(Modifier.fillMaxSize().padding(padding), Alignment.Center) {
                 if (state.loading) {
-                    Text("Loading…")
+                    Text("加载中…")
                 } else {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
@@ -195,15 +195,15 @@ fun ClipDetailScreen(
                             modifier = Modifier.size(48.dp)
                         )
                         Spacer(Modifier.height(12.dp))
-                        Text("Clip deleted", style = MaterialTheme.typography.titleMedium)
+                        Text("条目已删除", style = MaterialTheme.typography.titleMedium)
                         Spacer(Modifier.height(4.dp))
                         Text(
-                            "It no longer exists in your history.",
+                            "该条目已不在历史中。",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         Spacer(Modifier.height(16.dp))
-                        TextButton(onClick = onBack) { Text("Go back") }
+                        TextButton(onClick = onBack) { Text("返回") }
                     }
                 }
             }
@@ -282,7 +282,7 @@ fun ClipDetailScreen(
                         if (clip.isLocked) {
                             Icon(
                                 Icons.Filled.Lock,
-                                contentDescription = "Locked",
+                                contentDescription = "已锁定",
                                 tint = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.size(16.dp)
                             )
@@ -304,7 +304,7 @@ fun ClipDetailScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 DetailAction(
-                    label = if (copied) "Copied" else "Copy",
+                    label = if (copied) "已复制" else "复制",
                     icon = if (copied) Icons.Outlined.Check else Icons.Outlined.ContentCopy,
                     highlight = copied,
                     onClick = {
@@ -316,7 +316,7 @@ fun ClipDetailScreen(
                     modifier = Modifier.weight(1f)
                 )
                 DetailAction(
-                    label = "Transform",
+                    label = "转换",
                     icon = Icons.Outlined.Transform,
                     onClick = {
                         haptics.light()
@@ -325,7 +325,7 @@ fun ClipDetailScreen(
                     modifier = Modifier.weight(1f)
                 )
                 DetailAction(
-                    label = "Queue",
+                    label = "队列",
                     icon = Icons.Outlined.Queue,
                     onClick = {
                         haptics.medium()
@@ -334,7 +334,7 @@ fun ClipDetailScreen(
                     modifier = Modifier.weight(1f)
                 )
                 DetailAction(
-                    label = "Share",
+                    label = "分享",
                     icon = Icons.Outlined.Share,
                     onClick = {
                         haptics.light()
@@ -351,7 +351,7 @@ fun ClipDetailScreen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 DetailAction(
-                    label = if (clip.isLocked) "Unlock" else "Lock",
+                    label = if (clip.isLocked) "解锁" else "Lock",
                     icon = if (clip.isLocked) Icons.Outlined.LockOpen else Icons.Outlined.Lock,
                     highlight = clip.isLocked,
                     onClick = {
@@ -377,7 +377,7 @@ fun ClipDetailScreen(
                     modifier = Modifier.weight(1f)
                 )
                 DetailAction(
-                    label = "Delete",
+                    label = "删除",
                     icon = Icons.Outlined.Delete,
                     destructive = true,
                     onClick = {
@@ -387,7 +387,7 @@ fun ClipDetailScreen(
                     modifier = Modifier.weight(1f)
                 )
                 DetailAction(
-                    label = "Organize",
+                    label = "整理",
                     icon = Icons.Outlined.Sell,
                     onClick = {
                         haptics.light()
@@ -399,35 +399,35 @@ fun ClipDetailScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            DetailMetaRow(label = "Characters", value = "${clip.content.length}")
+            DetailMetaRow(label = "字符数", value = "${clip.content.length}")
             DetailMetaRow(
-                label = "Words",
+                label = "词数",
                 value = remember(clip.content) {
                     clip.content.trim().split(Regex("\\s+")).count { it.isNotEmpty() }.toString()
                 }
             )
             if (clip.sourceLabel != null) {
-                DetailMetaRow(label = "Source", value = clip.sourceLabel)
+                DetailMetaRow(label = "来源", value = clip.sourceLabel)
             }
             val assigned = remember(state.tagIds, state.tags, state.collectionIds, state.collections) {
                 state.tags.filter { it.id in state.tagIds }.map { it.name } +
                     state.collections.filter { it.id in state.collectionIds }.map { it.name }
             }
             if (assigned.isNotEmpty()) {
-                DetailMetaRow(label = "Organized", value = assigned.joinToString(", "))
+                DetailMetaRow(label = "归类", value = assigned.joinToString(", "))
             }
 
             Spacer(Modifier.height(16.dp))
 
             TempClipRow(
-                label = "Expires",
-                value = clip.expiresAt?.let { "in ${formatRemaining(it, now)}" } ?: "Never",
+                label = "过期",
+                value = clip.expiresAt?.let { "${formatRemaining(it, now)}后" } ?: "永不",
                 onPick = { showExpirationDialog = true }
             )
             Spacer(Modifier.height(8.dp))
             TempClipRow(
-                label = "Use limit",
-                value = clip.useLimit?.let { "${clip.useCount}/${clip.useLimit} uses" } ?: "Unlimited",
+                label = "使用次数上限",
+                value = clip.useLimit?.let { "${clip.useCount}/${clip.useLimit} 次" } ?: "不限",
                 onPick = { showUseLimitDialog = true }
             )
 
@@ -473,10 +473,10 @@ fun ClipDetailScreen(
     if (showDeleteConfirm) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
-            title = { Text("Delete clip?") },
+            title = { Text("删除条目？") },
             text = {
                 Text(
-                    "This clip will be removed from your history. You can undo right after deleting.",
+                    "该条目将从历史中移除。删除后可立即撤销。",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -490,10 +490,10 @@ fun ClipDetailScreen(
                     colors = androidx.compose.material3.ButtonDefaults.textButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
                     )
-                ) { Text("Delete") }
+                ) { Text("删除") }
             },
             dismissButton = {
-                TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancel") }
+                TextButton(onClick = { showDeleteConfirm = false }) { Text("取消") }
             }
         )
     }
@@ -579,9 +579,9 @@ private fun promptUnlock(
     // user understands why they're being asked to authenticate on a Lock
     // tap as well as an Unlock tap.
     val (title, subtitle) = if (clip.isLocked) {
-        "Unlock clip" to "Authenticate to remove this clip's lock."
+        "解锁条目" to "验证身份以解除该条目的锁定。"
     } else {
-        "Lock clip" to "Authenticate to lock this clip's notes."
+        "锁定条目" to "验证身份以锁定该条目的备注。"
     }
     viewModel.biometricManager.prompt(
         activity = activity,
@@ -591,7 +591,7 @@ private fun promptUnlock(
         onFailure = { msg ->
             android.widget.Toast.makeText(
                 activity,
-                "Authentication failed: $msg",
+                "身份验证失败：$msg",
                 android.widget.Toast.LENGTH_SHORT
             ).show()
         },
@@ -627,19 +627,19 @@ private fun LockedScreen(
     ) {
         Icon(
             Icons.Filled.Lock,
-            contentDescription = "Locked",
+            contentDescription = "已锁定",
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(64.dp)
         )
         Spacer(Modifier.height(16.dp))
         Text(
-            "Locked clip",
+            "条目已锁定",
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold
         )
         Spacer(Modifier.height(8.dp))
         Text(
-            "Authenticate to view this clip's content.",
+            "验证身份以查看该条目内容。",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -650,7 +650,7 @@ private fun LockedScreen(
         ) {
             Icon(Icons.Outlined.LockOpen, contentDescription = null)
             Spacer(Modifier.width(8.dp))
-            Text("Unlock")
+            Text("解锁")
         }
     }
 }
@@ -678,7 +678,7 @@ private fun NotesSection(
                 )
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    "Notes",
+                    "备注",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -686,14 +686,14 @@ private fun NotesSection(
                     Spacer(Modifier.width(8.dp))
                     Icon(
                         Icons.Filled.Lock,
-                        contentDescription = "Locked",
+                        contentDescription = "已锁定",
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(14.dp)
                     )
                 }
                 Spacer(Modifier.weight(1f))
                 TextButton(onClick = onEdit) {
-                    Text(if (notes.isNullOrBlank()) "Add" else "Edit")
+                    Text(if (notes.isNullOrBlank()) "添加" else "编辑")
                 }
             }
             if (!notes.isNullOrBlank()) {
@@ -706,7 +706,7 @@ private fun NotesSection(
             } else {
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    "Add context or reminders.",
+                    "补充说明或提醒。",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -724,7 +724,7 @@ private fun NotesEditorDialog(
     var text by remember(initialNotes) { mutableStateOf(initialNotes) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Notes") },
+        title = { Text("备注") },
         text = {
             OutlinedTextField(
                 value = text,
@@ -739,9 +739,9 @@ private fun NotesEditorDialog(
             TextButton(
                 onClick = { onSave(text) },
                 enabled = text != initialNotes
-            ) { Text("Save") }
+            ) { Text("保存") }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } }
     )
 }
 
@@ -769,12 +769,12 @@ private fun TransformationBottomSheet(
                 .padding(bottom = 24.dp)
         ) {
             Text(
-                "Transform",
+                "转换",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(start = 24.dp, top = 8.dp, bottom = 4.dp)
             )
             Text(
-                "Pick a transformation and copy or replace.",
+                "选择一种转换方式，然后复制或替换。",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 24.dp, bottom = 12.dp)
@@ -840,11 +840,11 @@ private fun TransformationBottomSheet(
                     TextButton(
                         onClick = { onCopyToClipboard(preview!!) },
                         modifier = Modifier.weight(1f)
-                    ) { Text("Copy") }
+                    ) { Text("复制") }
                     TextButton(
                         onClick = { onReplace(preview!!) },
                         modifier = Modifier.weight(1f)
-                    ) { Text("Replace") }
+                    ) { Text("替换") }
                 }
             }
             error?.let {
@@ -944,22 +944,22 @@ private fun ExpirationPickerDialog(
     onPick: (Long?) -> Unit
 ) {
     val options = listOf(
-        "Never" to null,
-        "5 minutes" to (5 * 60_000L),
-        "30 minutes" to (30 * 60_000L),
-        "1 hour" to (60 * 60_000L),
-        "12 hours" to (12 * 60 * 60_000L),
-        "24 hours" to (24 * 60 * 60_000L),
-        "7 days" to (7 * 24 * 60 * 60_000L)
+        "永不" to null,
+        "5 分钟" to (5 * 60_000L),
+        "30 分钟" to (30 * 60_000L),
+        "1 小时" to (60 * 60_000L),
+        "12 小时" to (12 * 60 * 60_000L),
+        "24 小时" to (24 * 60 * 60_000L),
+        "7 天" to (7 * 24 * 60 * 60_000L)
     )
     val now = System.currentTimeMillis()
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Auto-delete") },
+        title = { Text("自动删除") },
         text = {
             Column {
                 Text(
-                    "The clip is removed after the chosen time. Pinned clips are never auto-deleted.",
+                    "所选时间过后将删除该条目。置顶条目不会自动删除。",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -992,7 +992,7 @@ private fun ExpirationPickerDialog(
             }
         },
         confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } }
     )
 }
 
@@ -1003,20 +1003,20 @@ private fun UseLimitPickerDialog(
     onPick: (Int?) -> Unit
 ) {
     val options = listOf<Pair<String, Int?>>(
-        "Unlimited" to null,
-        "1 use" to 1,
-        "2 uses" to 2,
-        "3 uses" to 3,
-        "5 uses" to 5,
-        "10 uses" to 10
+        "不限" to null,
+        "使用 1 次" to 1,
+        "使用 2 次" to 2,
+        "使用 3 次" to 3,
+        "使用 5 次" to 5,
+        "使用 10 次" to 10
     )
     androidx.compose.material3.AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Use limit") },
+        title = { Text("使用次数上限") },
         text = {
             Column {
                 Text(
-                    "The clip is removed after being copied this many times. Pinned clips are never auto-deleted.",
+                    "复制达到所选次数后将删除该条目。置顶条目不会自动删除。",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -1046,17 +1046,17 @@ private fun UseLimitPickerDialog(
             }
         },
         confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+        dismissButton = { TextButton(onClick = onDismiss) { Text("取消") } }
     )
 }
 
 private fun formatRemaining(expiresAt: Long, now: Long): String {
     val diff = expiresAt - now
-    if (diff <= 0) return "now"
+    if (diff <= 0) return "已到期"
     val minutes = diff / 60_000
     return when {
-        minutes < 60 -> "${minutes}m"
-        minutes < 24 * 60 -> "${minutes / 60}h"
-        else -> "${minutes / (24 * 60)}d"
+        minutes < 60 -> "${minutes} 分"
+        minutes < 24 * 60 -> "${minutes / 60} 小时"
+        else -> "${minutes / (24 * 60)} 天"
     }
 }

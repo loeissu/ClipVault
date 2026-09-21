@@ -68,10 +68,10 @@ fun TagsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Tags") },
+                title = { Text("标签") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -83,7 +83,7 @@ fun TagsScreen(
             ExtendedFloatingActionButton(
                 onClick = { showCreate = true },
                 icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
-                text = { Text("New tag") },
+                text = { Text("新建标签") },
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -139,16 +139,16 @@ fun TagsScreen(
     deletingTag?.let { tag ->
         AlertDialog(
             onDismissRequest = { deletingTag = null },
-            title = { Text("Delete tag?") },
-            text = { Text("Remove the \"${tag.name}\" tag. Clips will be untagged but kept.") },
+            title = { Text("删除标签？") },
+            text = { Text("移除标签「${tag.name}」。条目会取消该标签，但不会删除。") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteTag(tag.id)
                     deletingTag = null
-                }) { Text("Delete") }
+                }) { Text("删除") }
             },
             dismissButton = {
-                TextButton(onClick = { deletingTag = null }) { Text("Cancel") }
+                TextButton(onClick = { deletingTag = null }) { Text("取消") }
             }
         )
     }
@@ -190,16 +190,16 @@ private fun TagCard(
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "$usageCount clip${if (usageCount == 1) "" else "s"}",
+                    text = "$usageCount 条",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             IconButton(onClick = onEdit) {
-                Icon(Icons.Outlined.Edit, contentDescription = "Edit")
+                Icon(Icons.Outlined.Edit, contentDescription = "编辑")
             }
             IconButton(onClick = onDelete) {
-                Icon(Icons.Outlined.Delete, contentDescription = "Delete")
+                Icon(Icons.Outlined.Delete, contentDescription = "删除")
             }
         }
     }
@@ -222,10 +222,10 @@ private fun EmptyHint(onCreateClick: () -> Unit) {
                 modifier = Modifier.size(48.dp)
             )
             Spacer(Modifier.height(12.dp))
-            Text("No tags yet", style = MaterialTheme.typography.titleMedium)
+            Text("还没有标签", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(4.dp))
             Text(
-                "Tags let you organize clips across types and dates.",
+                "标签可跨类型、跨日期整理条目。",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -233,7 +233,7 @@ private fun EmptyHint(onCreateClick: () -> Unit) {
             TextButton(onClick = onCreateClick) {
                 Icon(Icons.Outlined.Add, contentDescription = null)
                 Spacer(Modifier.width(6.dp))
-                Text("Create your first tag")
+                Text("创建你的第一个标签")
             }
         }
     }
@@ -254,19 +254,19 @@ private fun TagEditorDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initial == null) "New tag" else "Edit tag") },
+        title = { Text(if (initial == null) "新建标签" else "编辑标签") },
         text = {
             Column {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
-                    label = { Text("Name") },
+                    label = { Text("名称") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    "Color",
+                    "颜色",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -301,10 +301,10 @@ private fun TagEditorDialog(
             TextButton(
                 enabled = name.isNotBlank(),
                 onClick = { onSave(name.trim(), TAG_COLORS[colorIndex]) }
-            ) { Text("Save") }
+            ) { Text("保存") }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text("取消") }
         }
     )
 }

@@ -248,7 +248,7 @@ class ClipboardMonitorService : Service() {
                         lastImageUri = uriKey
                         lastImagePath = savedPath
                         lastSeen = "[Image]"
-                        updateNotification("Image saved")
+                        updateNotification("图片已保存")
                     }
                 }
                 return true

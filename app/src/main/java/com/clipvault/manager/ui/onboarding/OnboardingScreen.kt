@@ -150,14 +150,14 @@ private fun ProgressHeader(
     ) {
         if (showBack) {
             TextButton(onClick = onBack) {
-                Text("Back")
+                Text("返回")
             }
         } else {
             Spacer(modifier = Modifier.width(64.dp))
         }
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = "$current of $total",
+            text = "$current / $total",
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -176,9 +176,9 @@ private fun ProgressHeader(
 private fun WelcomePage() {
     PageScaffold(
         icon = Icons.Outlined.ContentPaste,
-        title = "Never lose a copy again",
-        body = "Clipboard Manager saves everything you copy so you can find and re-paste it later — even days after you copied it.",
-        footer = "All data stays on your phone. No accounts, no cloud, no tracking."
+        title = "复制内容永不丢失",
+        body = "剪贴板管理器会保存你复制的全部内容，方便日后查找并再次粘贴 — 哪怕是几天前复制的。",
+        footer = "所有数据都保存在你的手机上。无账号、不上云、无追踪。"
     )
 }
 
@@ -186,9 +186,9 @@ private fun WelcomePage() {
 private fun BackgroundServicePage(monitoringOn: Boolean) {
     PageScaffold(
         icon = Icons.Outlined.ContentPaste,
-        title = "Already saving copies",
-        body = "A small notification runs while you use your phone. It captures everything you copy into your history list.",
-        footer = "You can pause it any time from the notification or Settings.",
+        title = "已开始保存复制内容",
+        body = "使用手机时会有一条常驻通知，把复制的内容写入历史列表。",
+        footer = "可随时在通知或设置中暂停该功能。",
         statusBadge = if (monitoringOn) StatusBadge.Active else StatusBadge.Inactive
     )
 }
@@ -202,20 +202,20 @@ private fun AccessibilityPage(
         BigIcon(Icons.Filled.Accessibility)
         Spacer(modifier = Modifier.height(16.dp))
         StatusRow(
-            label = if (granted) "Accessibility enabled" else "Accessibility not enabled",
+            label = if (granted) "无障碍已启用" else "无障碍未启用",
             isGranted = granted
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = "Capture copies in the background",
+            text = "在后台捕获复制内容",
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "Android 10+ blocks background clipboard access for privacy. " +
-                "Enabling this optional Accessibility service lets the app detect when you copy " +
-                "in any other app — even when it's not open.",
+            text = "Android 10 及以上出于隐私保护会限制后台读取剪贴板。 " +
+                "启用这项可选的无障碍服务后，应用才能感知你何时复制，" +
+                "即使是在其它应用中、或本应用未打开时。",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -223,7 +223,7 @@ private fun AccessibilityPage(
         Spacer(modifier = Modifier.height(24.dp))
         if (granted) {
             OutlinedButton(onClick = onEnable, modifier = Modifier.fillMaxWidth()) {
-                Text("Open settings")
+                Text("打开设置")
             }
         } else {
             Button(
@@ -233,12 +233,12 @@ private fun AccessibilityPage(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text("Enable accessibility")
+                Text("启用无障碍")
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Optional — you can skip and enable later in Settings.",
+            text = "可选 — 可先跳过，稍后在设置中启用。",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -255,13 +255,13 @@ private fun BubbleAndTilePage(
         BigIcon(Icons.Outlined.BubbleChart)
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = "Quick access shortcuts",
+            text = "快捷访问入口",
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Two optional ways to grab a copy from anywhere:",
+            text = "以下两种可选方式，可让你在任意界面快速保存复制内容：",
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -270,11 +270,11 @@ private fun BubbleAndTilePage(
 
         ShortcutRow(
             icon = Icons.Outlined.BubbleChart,
-            title = "Floating bubble",
-            description = "A small draggable bubble that saves the current clipboard when you tap it.",
-            status = if (overlayGranted) "Overlay permission granted" else "Overlay permission needed",
+            title = "悬浮气泡",
+            description = "可拖动的小气泡；点按即可保存当前剪贴板。",
+            status = if (overlayGranted) "已授予悬浮窗权限" else "需要悬浮窗权限",
             isGranted = overlayGranted,
-            actionLabel = if (overlayGranted) "Granted" else "Grant permission",
+            actionLabel = if (overlayGranted) "已授权" else "授予权限",
             onAction = if (!overlayGranted) onGrantOverlay else null
         )
 
@@ -282,10 +282,10 @@ private fun BubbleAndTilePage(
 
         ShortcutRow(
             icon = Icons.Filled.Settings,
-            title = "Quick Settings tile",
-            description = "Pull down the notification shade, tap the pencil icon, then drag " +
-                "\"Clipboard history\" onto the bar.",
-            status = "Manual setup",
+            title = "快捷设置磁贴",
+            description = "下拉通知栏，点铅笔图标，然后把 " +
+                "「剪贴板历史」拖到快捷栏。",
+            status = "需手动设置",
             isGranted = false,
             actionLabel = null,
             onAction = null
@@ -293,7 +293,7 @@ private fun BubbleAndTilePage(
 
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Both are optional. You can enable them later from Settings.",
+            text = "两者均为可选，之后可在设置中开启。",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
@@ -314,7 +314,7 @@ private fun PageScaffold(
         Spacer(modifier = Modifier.height(16.dp))
         if (statusBadge != null) {
             StatusRow(
-                label = if (statusBadge == StatusBadge.Active) "Running" else "Paused",
+                label = if (statusBadge == StatusBadge.Active) "运行中" else "已暂停",
                 isGranted = statusBadge == StatusBadge.Active
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -447,7 +447,7 @@ private fun BottomActions(
             containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
-        Text(if (isLastPage) "Get started" else "Continue")
+        Text(if (isLastPage) "开始使用" else "继续")
         Spacer(modifier = Modifier.width(8.dp))
         Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = null, modifier = Modifier.size(18.dp))
     }

@@ -131,7 +131,7 @@ class MainActivity : FragmentActivity() {
             }
 
             // Auto-trigger the biometric prompt when the lock screen is shown
-            // so the user doesn't have to tap "Unlock" first. The prompt is
+            // so the user doesn't have to tap "解锁" first. The prompt is
             // started only while the activity is RESUMED — androidx.biometric
             // requires a resumed host, and firing from first-frame composition
             // crashed the process on cold start. Keyed on the lock state's
@@ -143,8 +143,8 @@ class MainActivity : FragmentActivity() {
                     this@MainActivity.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                         biometricManager.prompt(
                             activity = this@MainActivity,
-                            title = "Unlock ClipVault",
-                            subtitle = "Authenticate to access your clipboard",
+                            title = "解锁 ClipVault",
+                            subtitle = "验证身份后访问剪贴板",
                             onSuccess = { appLocked = false },
                             onFailure = { /* keep locked; LockScreen lets user retry */ },
                             onCancel = { /* user dismissed; keep locked */ }
@@ -162,13 +162,13 @@ class MainActivity : FragmentActivity() {
                         onAuthenticate = {
                             biometricManager.prompt(
                                 activity = this@MainActivity,
-                                title = "Unlock ClipVault",
-                                subtitle = "Authenticate to access your clipboard",
+                                title = "解锁 ClipVault",
+                                subtitle = "验证身份后访问剪贴板",
                                 onSuccess = { appLocked = false },
                                 onFailure = { msg ->
                                     android.widget.Toast.makeText(
                                         this@MainActivity,
-                                        "Authentication failed: $msg",
+                                        "身份验证失败：$msg",
                                         android.widget.Toast.LENGTH_SHORT
                                     ).show()
                                 },

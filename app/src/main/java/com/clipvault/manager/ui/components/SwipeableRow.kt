@@ -135,13 +135,13 @@ private fun SwipeBackground(direction: SwipeToDismissBoxValue) {
                     modifier = Modifier.size(24.dp)
                 )
                 androidx.compose.material3.Text(
-                    "Delete",
+                    "删除",
                     color = MaterialTheme.colorScheme.onErrorContainer,
                     style = MaterialTheme.typography.labelLarge
                 )
             } else if (isPinSide) {
                 androidx.compose.material3.Text(
-                    "Pin",
+                    "置顶",
                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                     style = MaterialTheme.typography.labelLarge
                 )

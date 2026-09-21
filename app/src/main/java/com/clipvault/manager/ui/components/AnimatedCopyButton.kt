@@ -62,7 +62,7 @@ fun AnimatedCopyButton(
             .background(bg)
             .semantics {
                 role = Role.Button
-                contentDescription = if (isCopied) "Copied" else "Copy"
+                contentDescription = if (isCopied) "已复制" else "复制"
             },
         contentAlignment = Alignment.Center
     ) {

@@ -198,7 +198,7 @@ class HomeViewModel @Inject constructor(
     private val loadedIds = MutableStateFlow<Set<Long>>(emptySet())
 
     /** Tracks the ids the Composable has currently loaded from the paged stream
-     *  so multi-select "Select all" / "X of Y" reflects what the user can see. */
+     *  so multi-select "全选" / "X of Y" reflects what the user can see. */
     fun setLoadedIds(ids: Set<Long>) { loadedIds.value = ids }
 
     val state: StateFlow<HomeUiState> = combine(

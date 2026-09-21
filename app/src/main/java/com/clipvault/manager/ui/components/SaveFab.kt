@@ -24,7 +24,7 @@ import com.clipvault.manager.ui.theme.Motion
 fun SaveFab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    label: String = "Save now",
+    label: String = "立即保存",
     isPulsing: Boolean = false
 ) {
     val scale by animateFloatAsState(

@@ -151,7 +151,7 @@ class BubbleService : Service() {
         } catch (e: Exception) {
             // No overlay permission, OEM restriction, or system policy block —
             // back out cleanly so we don't leave the service half-alive
-            android.util.Log.w("BubbleService", "Failed to add bubble overlay", e)
+            android.util.Log.w("BubbleService", "无法添加悬浮气泡", e)
             stopSelf()
         }
     }
@@ -162,21 +162,21 @@ class BubbleService : Service() {
                 val cm = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
                 val clip: ClipData? = cm.primaryClip
                 if (clip == null || clip.itemCount == 0) {
-                    toast("Clipboard is empty")
+                    toast("剪贴板为空")
                     return@launch
                 }
                 val text = clip.getItemAt(0).coerceToText(this@BubbleService)
                     ?.toString().orEmpty()
                 if (text.isBlank()) {
-                    toast("Clipboard is empty")
+                    toast("剪贴板为空")
                     return@launch
                 }
                 val saved = repository.saveIfNew(text, sourceLabel = "bubble")
-                toast(if (saved != null) "Saved to clipboard history" else "Already saved")
+                toast(if (saved != null) "已保存到剪贴板历史" else "已保存过")
             } catch (_: SecurityException) {
-                toast("Cannot read clipboard right now")
+                toast("暂时无法读取剪贴板")
             } catch (_: Exception) {
-                toast("Could not save")
+                toast("无法保存")
             }
         }
     }

@@ -62,21 +62,21 @@ fun OrganizeSheet(
                 .padding(bottom = 32.dp)
         ) {
             Text(
-                "Organize",
+                "整理",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(start = 24.dp, top = 8.dp, bottom = 4.dp)
             )
             Text(
-                "Assign tags and collections to this clip.",
+                "为该条目分配标签与合集。",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 24.dp, bottom = 12.dp)
             )
 
-            SectionLabel("Tags")
+            SectionLabel("标签")
             if (tags.isEmpty()) {
                 Text(
-                    "No tags yet. Create them from Settings → Tags.",
+                    "还没有标签。可在「设置 → 标签」中创建。",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp)
@@ -112,10 +112,10 @@ fun OrganizeSheet(
 
             Spacer(Modifier.height(20.dp))
 
-            SectionLabel("Collections")
+            SectionLabel("合集")
             if (collections.isEmpty()) {
                 Text(
-                    "No collections yet. Create them from Settings → Collections.",
+                    "还没有合集。可在「设置 → 合集」中创建。",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp)
@@ -150,7 +150,7 @@ fun OrganizeSheet(
                 modifier = Modifier
                     .align(Alignment.End)
                     .padding(horizontal = 24.dp)
-            ) { Text("Done") }
+            ) { Text("完成") }
         }
     }
 }

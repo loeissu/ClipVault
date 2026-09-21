@@ -2,27 +2,27 @@
 <resources>
     <string name="app_name">ClipVault</string>
 
-    <string name="notif_title">Clipboard Manager is active</string>
-    <string name="notif_idle">Waiting for copied text…</string>
-    <string name="action_pause">Pause</string>
-    <string name="action_resume">Resume</string>
-    <string name="action_stop">Stop</string>
-    <string name="channel_name">Clipboard monitor</string>
-    <string name="channel_desc">Keeps clipboard history in sync while the app is in use.</string>
+    <string name="notif_title">剪贴板管理器运行中</string>
+    <string name="notif_idle">正在等待复制的文本…</string>
+    <string name="action_pause">暂停</string>
+    <string name="action_resume">继续</string>
+    <string name="action_stop">停止</string>
+    <string name="channel_name">剪贴板监控</string>
+    <string name="channel_desc">应用使用期间持续同步维护剪贴板历史。</string>
 
     <!-- Bubble -->
-    <string name="bubble_notif_title">Clipboard bubble is active</string>
-    <string name="bubble_notif_text">Tap the floating bubble to save the current clipboard.</string>
-    <string name="bubble_channel_desc">Controls the floating clipboard bubble overlay.</string>
-    <string name="bubble_content_description">Clipboard bubble</string>
+    <string name="bubble_notif_title">剪贴板气泡运行中</string>
+    <string name="bubble_notif_text">点按悬浮气泡即可保存当前剪贴板。</string>
+    <string name="bubble_channel_desc">用于控制剪贴板悬浮气泡叠层。</string>
+    <string name="bubble_content_description">剪贴板气泡</string>
 
     <!-- Tile -->
-    <string name="tile_label">Clipboard history</string>
+    <string name="tile_label">剪贴板历史</string>
 
     <!-- Widget -->
-    <string name="widget_description">Recent clipboard items</string>
-    <string name="widget_loading">Loading…</string>
+    <string name="widget_description">最近的剪贴板条目</string>
+    <string name="widget_loading">加载中…</string>
 
     <!-- Accessibility -->
-    <string name="accessibility_service_description">Detects when you copy text in other apps and saves it to your clipboard history. No data leaves your device.</string>
+    <string name="accessibility_service_description">检测你在其它应用中复制的文本，并保存到剪贴板历史。数据不会离开本机。</string>
 </resources>

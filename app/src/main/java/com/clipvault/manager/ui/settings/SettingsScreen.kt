@@ -141,9 +141,9 @@ fun SettingsScreen(
                             stream.write(content.toByteArray())
                         }
                     }
-                    exportMessage = "Exported ${clips.size} clips as ${selectedExportFormat.extension.uppercase()}"
+                    exportMessage = "已将 ${clips.size} 条导出为 ${selectedExportFormat.extension.uppercase()}"
                 } catch (e: Exception) {
-                    exportMessage = "Export failed: ${e.message}"
+                    exportMessage = "导出失败：${e.message}"
                 } finally {
                     isExporting = false
                 }
@@ -160,19 +160,19 @@ fun SettingsScreen(
                     val clips = withContext(Dispatchers.IO) {
                         val raw = context.contentResolver.openInputStream(uri)?.use { stream ->
                             stream.bufferedReader().readText()
-                        } ?: throw Exception("Could not read file")
+                        } ?: throw Exception("无法读取文件")
                         if (raw.trimStart().startsWith("[")) {
                             com.clipvault.manager.data.export.ClipJsonExporter.importFromJson(raw)
                         } else if (raw.trimStart().startsWith("{")) {
                             com.clipvault.manager.data.export.ClipJsonExporter.importFromJson(raw)
                         } else {
-                            throw Exception("Only JSON exports are supported for import.")
+                            throw Exception("导入仅支持本应用导出的 JSON 文件。")
                         }
                     }
                     val count = viewModel.importClips(clips)
-                    exportMessage = "Imported $count clips"
+                    exportMessage = "已导入 $count 条"
                 } catch (e: Exception) {
-                    exportMessage = "Import failed: ${e.message}"
+                    exportMessage = "导入失败：${e.message}"
                 }
             }
         }
@@ -181,7 +181,7 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings") },
+                title = { Text("设置") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
@@ -195,14 +195,14 @@ fun SettingsScreen(
             contentPadding = PaddingValues(top = 8.dp, bottom = 32.dp)
         ) {
             // ── Monitoring ──────────────────────────────────────────────
-            item { SectionHeader("Monitoring") }
+            item { SectionHeader("监控") }
             item {
                 SettingsCard {
                     ToggleRow(
                         accent = Indigo,
                         icon = Icons.Outlined.ContentPaste,
-                        title = "Clipboard monitoring",
-                        subtitle = "Save everything you copy while using your phone.",
+                        title = "剪贴板监控",
+                        subtitle = "保存你在使用手机时复制的全部内容。",
                         checked = state.monitoringEnabled,
                         onCheckedChange = viewModel::setMonitoring
                     )
@@ -210,14 +210,14 @@ fun SettingsScreen(
             }
 
             // ── Privacy ─────────────────────────────────────────────
-            item { SectionHeader("Privacy") }
+            item { SectionHeader("隐私") }
             item {
                 SettingsCard {
                     ToggleRow(
                         accent = Red,
                         icon = Icons.Outlined.VisibilityOff,
-                        title = "Mask sensitive content",
-                        subtitle = "Hide clip text in notifications, widget, and search.",
+                        title = "隐藏敏感内容",
+                        subtitle = "在通知、小组件与搜索结果中隐藏条目正文。",
                         checked = state.maskSensitiveContent,
                         onCheckedChange = viewModel::setMaskSensitiveContent
                     )
@@ -225,8 +225,8 @@ fun SettingsScreen(
                     ToggleRow(
                         accent = Purple,
                         icon = Icons.Outlined.Fingerprint,
-                        title = "Require biometric to open",
-                        subtitle = "Lock the app behind biometric / device credential.",
+                        title = "打开时需要生物识别",
+                        subtitle = "使用生物识别或设备凭据锁定应用。",
                         checked = state.requireBiometric,
                         onCheckedChange = viewModel::setRequireBiometric
                     )
@@ -234,13 +234,13 @@ fun SettingsScreen(
             }
 
             // ── Quick access ────────────────────────────────────────────
-            item { SectionHeader("Quick access") }
+            item { SectionHeader("快捷访问") }
             item {
                 SettingsCard {
                     ToggleRow(
                         accent = Amber,
                         icon = Icons.Outlined.BubbleChart,
-                        title = "Floating bubble",
+                        title = "悬浮气泡",
                         subtitle = bubbleSubtitle(context),
                         checked = state.bubbleEnabled,
                         onCheckedChange = { requested ->
@@ -255,50 +255,50 @@ fun SettingsScreen(
                     ChevronRow(
                         accent = Blue,
                         icon = Icons.Outlined.Widgets,
-                        title = "Quick Settings tile",
-                        subtitle = "Pull down the shade → edit → drag to the bar."
+                        title = "快捷设置磁贴",
+                        subtitle = "下拉通知栏 → 点编辑 → 拖到快捷栏。"
                     )
                     SettingsDivider()
                     ChevronRow(
                         accent = Violet,
                         icon = Icons.Outlined.AccessibilityNew,
-                        title = "Accessibility service",
-                        subtitle = "Optional. Capture copies in any app.",
+                        title = "无障碍服务",
+                        subtitle = "可选。用于在任意应用中捕获复制内容。",
                         onClick = { runCatching { context.startActivity(viewModel.accessibilitySettingsIntent()) } }
                     )
                 }
             }
 
             // ── Organize ─────────────────────────────────────────────────
-            item { SectionHeader("Organize") }
+            item { SectionHeader("整理") }
             item {
                 SettingsCard {
                     ChevronRow(
                         accent = Indigo,
                         icon = Icons.Outlined.Sell,
-                        title = "Tags",
-                        subtitle = "Organize clips with custom labels.",
+                        title = "标签",
+                        subtitle = "用自定义标签整理条目。",
                         onClick = { onNavigate(com.clipvault.manager.ui.nav.Route.Tags.path) }
                     )
                     SettingsDivider()
                     ChevronRow(
                         accent = Violet,
                         icon = Icons.Outlined.Folder,
-                        title = "Collections",
-                        subtitle = "Group related clips into folders.",
+                        title = "合集",
+                        subtitle = "把相关条目归入合集文件夹。",
                         onClick = { onNavigate(com.clipvault.manager.ui.nav.Route.Collections.path) }
                     )
                 }
             }
 
             // ── Cleanup ─────────────────────────────────────────────────
-            item { SectionHeader("Cleanup") }
+            item { SectionHeader("清理") }
             item {
                 SettingsCard {
                     ChevronRow(
                         accent = Green,
                         icon = Icons.Outlined.AutoAwesome,
-                        title = "Auto-delete clips",
+                        title = "自动删除条目",
                         subtitle = retentionLabel(state.retentionDays),
                         onClick = { showRetentionSheet = true }
                     )
@@ -306,7 +306,7 @@ fun SettingsScreen(
                     ChevronRow(
                         accent = Pink,
                         icon = Icons.Outlined.Palette,
-                        title = "Theme",
+                        title = "主题",
                         subtitle = themeLabel(state.themeMode),
                         onClick = { showThemeSheet = true }
                     )
@@ -314,8 +314,8 @@ fun SettingsScreen(
                     ChevronRow(
                         accent = Green,
                         icon = Icons.Outlined.ContentCopy,
-                        title = "Find duplicates",
-                        subtitle = "Merge identical clips to keep history tidy.",
+                        title = "查找重复项",
+                        subtitle = "合并内容相同的条目，保持历史整洁。",
                         onClick = {
                             showDuplicatesDialog = true
                         }
@@ -324,14 +324,14 @@ fun SettingsScreen(
             }
 
             // ── Data ──────────────────────────────────────────────────
-            item { SectionHeader("Data") }
+            item { SectionHeader("数据") }
             item {
                 SettingsCard {
                     ChevronRow(
                         accent = Blue,
                         icon = Icons.Outlined.FileUpload,
-                        title = "Export history",
-                        subtitle = "Save all clips as ${selectedExportFormat.extension.uppercase()}.",
+                        title = "导出历史",
+                        subtitle = "把全部条目导出为 ${selectedExportFormat.extension.uppercase()}。",
                         onClick = {
                             if (!isExporting) showExportFormatSheet = true
                         }
@@ -347,7 +347,7 @@ fun SettingsScreen(
                             )
                             Spacer(Modifier.width(10.dp))
                             Text(
-                                "Exporting…",
+                                "导出中…",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -357,8 +357,8 @@ fun SettingsScreen(
                     ChevronRow(
                         accent = Green,
                         icon = Icons.Outlined.FileDownload,
-                        title = "Import history",
-                        subtitle = "Restore clips from a JSON backup.",
+                        title = "导入历史",
+                        subtitle = "从 JSON 备份恢复条目。",
                         onClick = { importLauncher.launch(arrayOf("application/json")) }
                     )
                     if (exportMessage != null) {
@@ -373,7 +373,7 @@ fun SettingsScreen(
             }
 
             // ── About ───────────────────────────────────────────────────
-            item { SectionHeader("About") }
+            item { SectionHeader("关于") }
             item {
                 SettingsCard {
                     // Debug: appears only when the in-app crash reporter has
@@ -389,19 +389,19 @@ fun SettingsScreen(
                         ChevronRow(
                             accent = Red,
                             icon = Icons.Outlined.BugReport,
-                            title = "Debug crash logs (${crashReports.size})",
-                            subtitle = "Tap to copy the newest stack trace.",
+                            title = "调试崩溃日志（${crashReports.size}）",
+                            subtitle = "点按可复制最新的崩溃堆栈。",
                             onClick = {
                                 val text = com.clipvault.manager.util.CrashReporter.latestReportText(context)
-                                    ?: "No report content"
+                                    ?: "没有报告内容"
                                 val cm = context.getSystemService(Context.CLIPBOARD_SERVICE)
                                     as android.content.ClipboardManager
                                 cm.setPrimaryClip(
-                                    android.content.ClipData.newPlainText("ClipVault crash log", text.take(90_000))
+                                    android.content.ClipData.newPlainText("ClipVault 崩溃日志", text.take(90_000))
                                 )
                                 android.widget.Toast.makeText(
                                     context,
-                                    "Newest crash log copied — paste it to the developer",
+                                    "已复制最新崩溃日志 — 可粘贴给开发者",
                                     android.widget.Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -411,24 +411,24 @@ fun SettingsScreen(
                     ChevronRow(
                         accent = Slate,
                         icon = Icons.Outlined.Info,
-                        title = "Clipboard Manager",
-                        subtitle = "Version ${BuildConfig.VERSION_NAME}",
+                        title = "剪贴板管理器",
+                        subtitle = "版本 ${BuildConfig.VERSION_NAME}",
                         onClick = { showAboutDialog = true }
                     )
                     SettingsDivider()
                     ChevronRow(
                         accent = Amber,
                         icon = Icons.Outlined.RestartAlt,
-                        title = "Replay setup guide",
-                        subtitle = "Walk through the onboarding flow again.",
+                        title = "重新运行设置引导",
+                        subtitle = "再走一遍新手引导流程。",
                         onClick = { viewModel.resetOnboarding() }
                     )
                     SettingsDivider()
                     ChevronRow(
                         accent = Red,
                         icon = Icons.Outlined.DeleteForever,
-                        title = "Delete all clips",
-                        subtitle = "Removes every saved entry. Pinned items are kept.",
+                        title = "删除全部条目",
+                        subtitle = "删除全部已保存条目，置顶项会保留。",
                         destructive = true,
                         onClick = { showClearDialog = true }
                     )
@@ -444,13 +444,13 @@ fun SettingsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "All data stays on your device",
+                        text = "所有数据仅保存在本机",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = "No accounts · No tracking · No cloud",
+                        text = "无账号 · 无追踪 · 不上云",
                         style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -465,16 +465,16 @@ fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { showBubbleDialog = false },
             icon = { Icon(Icons.Outlined.BubbleChart, contentDescription = null, tint = Amber.tint) },
-            title = { Text("Overlay permission") },
-            text = { Text("To show the floating bubble, Android requires the \"draw over other apps\" permission.") },
+            title = { Text("悬浮窗权限") },
+            text = { Text("要显示悬浮气泡，Android 需要「显示在其他应用上层」权限。") },
             confirmButton = {
                 TextButton(onClick = {
                     runCatching { context.startActivity(viewModel.overlayPermissionIntent()) }
                     showBubbleDialog = false
-                }) { Text("Grant") }
+                }) { Text("授权") }
             },
             dismissButton = {
-                TextButton(onClick = { showBubbleDialog = false }) { Text("Cancel") }
+                TextButton(onClick = { showBubbleDialog = false }) { Text("取消") }
             }
         )
     }
@@ -483,16 +483,16 @@ fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { showClearDialog = false },
             icon = { Icon(Icons.Outlined.DeleteForever, contentDescription = null, tint = Red.tint) },
-            title = { Text("Delete all clips?") },
-            text = { Text("This permanently removes every saved clip from your history.") },
+            title = { Text("删除全部条目？") },
+            text = { Text("将从历史中永久删除全部已保存条目。") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteAll()
                     showClearDialog = false
-                }) { Text("Delete") }
+                }) { Text("删除") }
             },
             dismissButton = {
-                TextButton(onClick = { showClearDialog = false }) { Text("Cancel") }
+                TextButton(onClick = { showClearDialog = false }) { Text("取消") }
             }
         )
     }
@@ -501,19 +501,19 @@ fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { showAboutDialog = false },
             icon = { Icon(Icons.Outlined.Info, contentDescription = null, tint = Slate.tint) },
-            title = { Text("Clipboard Manager") },
+            title = { Text("剪贴板管理器") },
             text = {
                 Column {
-                    Text("Version ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodyMedium)
+                    Text("版本 ${BuildConfig.VERSION_NAME}", style = MaterialTheme.typography.bodyMedium)
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        "A simple clipboard history app. Everything you copy is saved locally — no account, no cloud, no tracking.",
+                        "简洁的本地剪贴板历史应用。复制内容全部保存在本机 — 无账号、不上云、无追踪。",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             },
-            confirmButton = { TextButton(onClick = { showAboutDialog = false }) { Text("Done") } }
+            confirmButton = { TextButton(onClick = { showAboutDialog = false }) { Text("完成") } }
         )
     }
 
@@ -525,10 +525,10 @@ fun SettingsScreen(
         AlertDialog(
             onDismissRequest = { showDuplicatesDialog = false },
             icon = { Icon(Icons.Outlined.ContentCopy, contentDescription = null, tint = Green.tint) },
-            title = { Text("Find duplicates") },
+            title = { Text("查找重复项") },
             text = {
                 if (duplicates.isEmpty()) {
-                    Text("No duplicate clips found — nice and tidy.")
+                    Text("未发现重复条目，历史很干净。")
                 } else {
                     Column(
                         modifier = Modifier
@@ -536,7 +536,7 @@ fun SettingsScreen(
                             .verticalScroll(rememberScrollState())
                     ) {
                         Text(
-                            "Each group shares the same content. Merging keeps the newest clip (pinned first) and folds tags, collections and use counts into it.",
+                            "每一组内容相同。合并时保留最新条目（置顶优先），并把标签、合集与使用次数并入该条目。",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -556,20 +556,20 @@ fun SettingsScreen(
                                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                                     )
                                     Text(
-                                        text = "${group.count} copies",
+                                        text = "${group.count} 次复制",
                                         style = MaterialTheme.typography.labelMedium,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 TextButton(onClick = {
                                     viewModel.mergeDuplicate(group.keepId, group.content)
-                                }) { Text("Merge") }
+                                }) { Text("合并") }
                             }
                         }
                     }
                 }
             },
-            confirmButton = { TextButton(onClick = { showDuplicatesDialog = false }) { Text("Done") } }
+            confirmButton = { TextButton(onClick = { showDuplicatesDialog = false }) { Text("完成") } }
         )
     }
 
@@ -780,12 +780,12 @@ private fun RetentionPickerSheet(
                 .padding(bottom = 24.dp)
         ) {
             Text(
-                "Auto-delete after",
+                "自动删除时间",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(start = 24.dp, top = 8.dp, bottom = 4.dp)
             )
             Text(
-                "Older clips are removed automatically.",
+                "较旧的条目会被自动移除。",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 24.dp, bottom = 12.dp)
@@ -793,9 +793,9 @@ private fun RetentionPickerSheet(
             listOf(0, 7, 30, 90, 365).forEach { days ->
                 SheetOption(
                     label = when (days) {
-                        0 -> "Never"
-                        365 -> "1 year"
-                        else -> "$days days"
+                        0 -> "永不"
+                        365 -> "1 年"
+                        else -> "$days 天"
                     },
                     selected = selected == days,
                     onClick = { onSelect(days) }
@@ -824,21 +824,21 @@ private fun ThemePickerSheet(
                 .padding(bottom = 24.dp)
         ) {
             Text(
-                "Theme",
+                "主题",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(start = 24.dp, top = 8.dp, bottom = 4.dp)
             )
             Text(
-                "Pick the look that suits you.",
+                "选择你喜欢的外观。",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 24.dp, bottom = 12.dp)
             )
             listOf(
-                0 to "Follow system",
-                1 to "Light",
-                2 to "Dark",
-                3 to "AMOLED Black"
+                0 to "跟随系统",
+                1 to "浅色",
+                2 to "深色",
+                3 to "AMOLED 纯黑"
             ).forEach { (value, label) ->
                 SheetOption(
                     label = label,
@@ -884,28 +884,28 @@ private fun SheetOption(label: String, selected: Boolean, onClick: () -> Unit) {
 @Composable
 private fun bubbleSubtitle(context: Context): String {
     val overlayGranted = canDrawOverlays(context)
-    return if (overlayGranted) "Tap the bubble to save the current clipboard."
-    else "Tap to grant the overlay permission."
+    return if (overlayGranted) "点按气泡即可保存当前剪贴板。"
+    else "点按以授予悬浮窗权限。"
 }
 
 private fun canDrawOverlays(context: Context): Boolean =
     Settings.canDrawOverlays(context)
 
 private fun retentionLabel(days: Int): String = when (days) {
-    0 -> "Never"
-    7 -> "After 7 days"
-    30 -> "After 30 days"
-    90 -> "After 90 days"
-    365 -> "After 1 year"
-    else -> "After $days days"
+    0 -> "永不"
+    7 -> "7 天后"
+    30 -> "30 天后"
+    90 -> "90 天后"
+    365 -> "1 年后"
+    else -> "$days 天后"
 }
 
 private fun themeLabel(mode: Int): String = when (mode) {
-    0 -> "Follow system"
-    1 -> "Light"
-    2 -> "Dark"
-    3 -> "AMOLED Black"
-    else -> "Follow system"
+    0 -> "跟随系统"
+    1 -> "浅色"
+    2 -> "深色"
+    3 -> "AMOLED 纯黑"
+    else -> "跟随系统"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -927,12 +927,12 @@ private fun ExportFormatPickerSheet(
                 .padding(bottom = 24.dp)
         ) {
             Text(
-                "Export format",
+                "导出格式",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(start = 24.dp, top = 8.dp, bottom = 4.dp)
             )
             Text(
-                "Pick how to encode your export.",
+                "选择导出文件使用的格式。",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(start = 24.dp, bottom = 12.dp)

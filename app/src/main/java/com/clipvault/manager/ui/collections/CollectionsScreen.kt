@@ -65,10 +65,10 @@ fun CollectionsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Collections") },
+                title = { Text("合集") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -80,7 +80,7 @@ fun CollectionsScreen(
             ExtendedFloatingActionButton(
                 onClick = { showCreate = true },
                 icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
-                text = { Text("New collection") },
+                text = { Text("新建合集") },
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -134,16 +134,16 @@ fun CollectionsScreen(
     deletingCollection?.let { collection ->
         AlertDialog(
             onDismissRequest = { deletingCollection = null },
-            title = { Text("Delete collection?") },
-            text = { Text("Remove \"${collection.name}\". Clips will stay in your history.") },
+            title = { Text("删除合集？") },
+            text = { Text("移除合集「${collection.name}」。其中的条目仍会保留在历史中。") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.deleteCollection(collection.id)
                     deletingCollection = null
-                }) { Text("Delete") }
+                }) { Text("删除") }
             },
             dismissButton = {
-                TextButton(onClick = { deletingCollection = null }) { Text("Cancel") }
+                TextButton(onClick = { deletingCollection = null }) { Text("取消") }
             }
         )
     }
@@ -186,16 +186,16 @@ private fun CollectionCard(
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "$usageCount clip${if (usageCount == 1) "" else "s"}",
+                    text = "$usageCount 条",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
             IconButton(onClick = onEdit) {
-                Icon(Icons.Outlined.Edit, contentDescription = "Edit")
+                Icon(Icons.Outlined.Edit, contentDescription = "编辑")
             }
             IconButton(onClick = onDelete) {
-                Icon(Icons.Outlined.Delete, contentDescription = "Delete")
+                Icon(Icons.Outlined.Delete, contentDescription = "删除")
             }
         }
     }
@@ -215,10 +215,10 @@ private fun EmptyHint(onCreateClick: () -> Unit) {
                 modifier = Modifier.size(48.dp)
             )
             Spacer(Modifier.height(12.dp))
-            Text("No collections yet", style = MaterialTheme.typography.titleMedium)
+            Text("还没有合集", style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(4.dp))
             Text(
-                "Collections group related clips into folders.",
+                "合集用于把相关条目归到同一文件夹。",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -226,7 +226,7 @@ private fun EmptyHint(onCreateClick: () -> Unit) {
             TextButton(onClick = onCreateClick) {
                 Icon(Icons.Outlined.Add, contentDescription = null)
                 Spacer(Modifier.width(6.dp))
-                Text("Create your first collection")
+                Text("创建你的第一个合集")
             }
         }
     }
@@ -241,12 +241,12 @@ private fun CollectionEditorDialog(
     var name by remember { mutableStateOf(initial?.name.orEmpty()) }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initial == null) "New collection" else "Edit collection") },
+        title = { Text(if (initial == null) "新建合集" else "编辑合集") },
         text = {
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Name") },
+                label = { Text("名称") },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -255,10 +255,10 @@ private fun CollectionEditorDialog(
             TextButton(
                 enabled = name.isNotBlank(),
                 onClick = { onSave(name.trim()) }
-            ) { Text(if (initial == null) "Create" else "Save") }
+            ) { Text(if (initial == null) "创建" else "保存") }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text("取消") }
         }
     )
 }

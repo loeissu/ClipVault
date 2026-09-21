@@ -107,7 +107,7 @@ class BiometricManager @Inject constructor() {
         val includesCredential =
             (allowedAuthenticators and BiometricManager.Authenticators.DEVICE_CREDENTIAL) != 0
         if (!includesCredential) {
-            builder.setNegativeButtonText("Cancel")
+            builder.setNegativeButtonText("取消")
         }
         try {
             prompt.authenticate(builder.build())
@@ -118,7 +118,7 @@ class BiometricManager @Inject constructor() {
             // into the normal failure path — an uncaught exception here took
             // the whole process down right after a save/unlock interaction.
             Log.w(TAG, "authenticate() failed to start", e)
-            onFailure("Biometric prompt unavailable: ${e.message ?: e.javaClass.simpleName}")
+            onFailure("生物识别提示不可用：${e.message ?: e.javaClass.simpleName}")
         }
     }
 

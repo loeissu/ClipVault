@@ -42,31 +42,31 @@ data class BottomNavItem(
 val bottomNavItems = listOf(
     BottomNavItem(
         route = Route.Home.path,
-        label = "Home",
+        label = "首页",
         selectedIcon = Icons.Filled.ContentPaste,
         unselectedIcon = Icons.Outlined.ContentPaste
     ),
     BottomNavItem(
         route = Route.Search.path,
-        label = "Search",
+        label = "搜索",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search
     ),
     BottomNavItem(
         route = Route.Snippets.path,
-        label = "Snippets",
+        label = "片段",
         selectedIcon = Icons.Filled.SnippetFolder,
         unselectedIcon = Icons.Outlined.SnippetFolder
     ),
     BottomNavItem(
         route = Route.Stats.path,
-        label = "Stats",
+        label = "统计",
         selectedIcon = Icons.Filled.BarChart,
         unselectedIcon = Icons.Outlined.BarChart
     ),
     BottomNavItem(
         route = Route.Settings.path,
-        label = "Settings",
+        label = "设置",
         selectedIcon = Icons.Filled.Settings,
         unselectedIcon = Icons.Outlined.Settings
     )

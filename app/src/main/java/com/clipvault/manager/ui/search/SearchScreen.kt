@@ -93,7 +93,7 @@ fun SearchScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Search") }
+                title = { Text("搜索") }
             )
         }
     ) { padding ->
@@ -109,7 +109,7 @@ fun SearchScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp)
                     .focusRequester(focusRequester),
-                placeholder = { Text("Find in history") },
+                placeholder = { Text("在历史中查找") },
                 shape = RoundedCornerShape(28.dp),
                 leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
                 trailingIcon = {
@@ -119,7 +119,7 @@ fun SearchScreen(
                         exit = fadeOut() + slideOutVertically(targetOffsetY = { -it / 2 })
                     ) {
                         IconButton(onClick = { viewModel.setQuery("") }) {
-                            Icon(Icons.Outlined.Close, contentDescription = "Clear")
+                            Icon(Icons.Outlined.Close, contentDescription = "清除")
                         }
                     }
                 },
@@ -133,8 +133,8 @@ fun SearchScreen(
             ) {
                 Hint(
                     icon = Icons.Outlined.History,
-                    title = "Search your clipboard history",
-                    body = "Type to find anything you've copied. Matches are highlighted."
+                    title = "搜索剪贴板历史",
+                    body = "输入关键词查找你复制过的内容，匹配项会高亮显示。"
                 )
             }
 
@@ -145,8 +145,8 @@ fun SearchScreen(
             ) {
                 Hint(
                     icon = Icons.Outlined.Search,
-                    title = "No matches",
-                    body = "Nothing in your history matches \"${state.query}\"."
+                    title = "无匹配结果",
+                    body = "历史中没有与「${state.query}」匹配的内容。"
                 )
             }
 
@@ -193,7 +193,7 @@ private fun ResultRow(
             .clickable(onClick = onOpen)
             .semantics {
                 role = Role.Button
-                contentDescription = "Clip: ${clip.preview}"
+                contentDescription = "条目：${clip.preview}"
             },
         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
@@ -233,7 +233,7 @@ private fun ResultRow(
                 if (bitmap != null) {
                     androidx.compose.foundation.Image(
                         bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Image clip, copied ${formatTime(clip.createdAt)}",
+                        contentDescription = "图片条目，复制于 ${formatTime(clip.createdAt)}",
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(96.dp)

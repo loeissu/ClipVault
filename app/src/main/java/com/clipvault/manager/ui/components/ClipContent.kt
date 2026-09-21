@@ -80,7 +80,7 @@ fun ClipContent(
                     ) {
                         Icon(
                             Icons.Filled.Check,
-                            contentDescription = "Save",
+                            contentDescription = "保存",
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -90,7 +90,7 @@ fun ClipContent(
                     ) {
                         Icon(
                             Icons.Filled.Close,
-                            contentDescription = "Cancel",
+                            contentDescription = "取消",
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -108,7 +108,7 @@ fun ClipContent(
                     capitalization = KeyboardCapitalization.None,
                     imeAction = ImeAction.Done
                 ),
-                label = { Text("Edit clip") },
+                label = { Text("编辑条目") },
                 singleLine = false
             )
 
@@ -163,22 +163,22 @@ private fun getFormatChips(
 ): List<FormatChipConfig> {
     return when (clipType) {
         com.clipvault.manager.data.local.entity.ClipType.TEXT -> listOf(
-            FormatChipConfig("Aa", "Strip HTML formatting") { stripHtml(it) },
-            FormatChipConfig("UPPER", "Convert to uppercase") { it.uppercase() },
-            FormatChipConfig("Title", "Convert to title case") { toTitleCase(it) },
-            FormatChipConfig("⏎", "Normalize whitespace") { it.replace(Regex("\\s+"), " ").trim() }
+            FormatChipConfig("Aa", "去除 HTML 格式") { stripHtml(it) },
+            FormatChipConfig("UPPER", "全部转换为大写") { it.uppercase() },
+            FormatChipConfig("标题", "每个单词首字母大写") { toTitleCase(it) },
+            FormatChipConfig("⏎", "规范化空白字符") { it.replace(Regex("\\s+"), " ").trim() }
         )
         com.clipvault.manager.data.local.entity.ClipType.JSON -> listOf(
-            FormatChipConfig("Raw", "Keep raw text") { it },
-            FormatChipConfig("Pretty", "Pretty print JSON") { prettyPrintJson(it) },
-            FormatChipConfig("Strip", "Strip HTML tags") { stripHtml(it) }
+            FormatChipConfig("原文", "保留原始文本") { it },
+            FormatChipConfig("格式化", "格式化 JSON") { prettyPrintJson(it) },
+            FormatChipConfig("去除", "去除 HTML 标签") { stripHtml(it) }
         )
         com.clipvault.manager.data.local.entity.ClipType.URL -> listOf(
-            FormatChipConfig("Raw", "Keep raw URL") { it }
+            FormatChipConfig("原文", "保留原始 URL") { it }
         )
         else -> listOf(
-            FormatChipConfig("Aa", "Strip HTML formatting") { stripHtml(it) },
-            FormatChipConfig("⏎", "Normalize whitespace") { it.replace(Regex("\\s+"), " ").trim() }
+            FormatChipConfig("Aa", "去除 HTML 格式") { stripHtml(it) },
+            FormatChipConfig("⏎", "规范化空白字符") { it.replace(Regex("\\s+"), " ").trim() }
         )
     }
 }

@@ -86,7 +86,7 @@ fun MultiSelectClipRow(
             )
             .semantics {
                 role = Role.Button
-                contentDescription = "Clip: ${clip.preview}"
+                contentDescription = "条目：${clip.preview}"
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -197,7 +197,7 @@ fun MultiSelectActionBar(
         ) {
             TextButton(onClick = onSelectAll) {
                 Text(
-                    text = if (selectedCount == totalCount) "Deselect all" else "Select all",
+                    text = if (selectedCount == totalCount) "取消全选" else "全选",
                     style = MaterialTheme.typography.labelLarge
                 )
             }
@@ -206,7 +206,7 @@ fun MultiSelectActionBar(
                     onClick = onPin,
                     enabled = selectedCount > 0
                 ) {
-                    Icon(Icons.Filled.PushPin, contentDescription = "Pin")
+                    Icon(Icons.Filled.PushPin, contentDescription = "置顶")
                 }
                 FilledIconButton(
                     onClick = onDelete,
@@ -216,7 +216,7 @@ fun MultiSelectActionBar(
                         contentColor = MaterialTheme.colorScheme.onErrorContainer
                     )
                 ) {
-                    Icon(Icons.Filled.Delete, contentDescription = "Delete")
+                    Icon(Icons.Filled.Delete, contentDescription = "删除")
                 }
             }
         }

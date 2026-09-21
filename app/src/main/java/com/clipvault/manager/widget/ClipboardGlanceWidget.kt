@@ -69,7 +69,7 @@ private val KEY_BIOMETRIC = booleanPreferencesKey("require_biometric")
  * - Pinned clips shown first in a dedicated section
  * - Tap row → opens app
  * - Tap copy icon → copies clip text to clipboard (no app open)
- * - Respects "Mask sensitive content" setting (shows •••••)
+ * - Respects "隐藏敏感内容" setting (shows •••••)
  */
 class ClipboardGlanceWidget : GlanceAppWidget() {
 
@@ -103,7 +103,7 @@ class ClipboardGlanceWidget : GlanceAppWidget() {
                 )
                 if (masking) {
                     Text(
-                        text = "hidden",
+                        text = "已隐藏",
                         style = TextStyle(color = WidgetTextSecondary, fontSize = 10.sp),
                         modifier = GlanceModifier.padding(
                             horizontal = 8.dp,
@@ -122,7 +122,7 @@ class ClipboardGlanceWidget : GlanceAppWidget() {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Nothing copied yet",
+                        text = "还没有复制内容",
                         style = TextStyle(color = WidgetTextSecondary, fontSize = 12.sp)
                     )
                 }
@@ -131,12 +131,12 @@ class ClipboardGlanceWidget : GlanceAppWidget() {
                 val recent = clips.filter { !it.isPinned }
                 Column(modifier = GlanceModifier.fillMaxWidth()) {
                     if (pinned.isNotEmpty()) {
-                        SectionLabel("Pinned")
+                        SectionLabel("置顶")
                         pinned.take(3).forEach { WidgetRow(it, masking) }
                         if (recent.isNotEmpty()) Spacer(modifier = GlanceModifier.size(4.dp))
                     }
                     if (recent.isNotEmpty()) {
-                        if (pinned.isEmpty()) SectionLabel("Recent")
+                        if (pinned.isEmpty()) SectionLabel("最近")
                         recent.take(if (pinned.isNotEmpty()) 3 else 5).forEach { WidgetRow(it, masking) }
                     }
                 }
@@ -156,7 +156,7 @@ class ClipboardGlanceWidget : GlanceAppWidget() {
     @Composable
     private fun WidgetRow(clip: ClipEntity, masking: Boolean) {
         val display = if (clip.isLocked) {
-            "🔒 Locked"
+            "🔒 已锁定"
         } else if (masking) "••••••••" else clip.content.take(40).let {
             if (clip.content.length > 40) "$it…" else it
         }

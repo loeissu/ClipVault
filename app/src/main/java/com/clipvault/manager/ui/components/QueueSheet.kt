@@ -40,7 +40,7 @@ import com.clipvault.manager.data.local.entity.ClipEntity
 import com.clipvault.manager.domain.model.Clip
 
 /**
- * Paste-queue tray: shows queued clips, the "next to paste" item, and lets the
+ * Paste-queue tray: shows queued clips, the "待粘贴" item, and lets the
  * user reorder, remove, copy-next, or clear the queue.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,10 +71,10 @@ fun QueueSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text("Paste queue", style = MaterialTheme.typography.titleLarge)
+                    Text("粘贴队列", style = MaterialTheme.typography.titleLarge)
                     Text(
-                        if (items.isEmpty()) "Queue is empty"
-                        else "Next to paste: #${currentIndex.coerceIn(0, items.size - 1) + 1} of ${items.size}",
+                        if (items.isEmpty()) "队列为空"
+                        else "下一条粘贴：第 ${currentIndex.coerceIn(0, items.size - 1) + 1} / ${items.size} 条",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -83,7 +83,7 @@ fun QueueSheet(
 
             if (items.isEmpty()) {
                 Text(
-                    "Add clips from the detail screen with the Queue button.",
+                    "在详情页点击「队列」按钮，可把条目加入队列。",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)
@@ -134,7 +134,7 @@ fun QueueSheet(
                                 ) {
                                     Icon(
                                         Icons.Outlined.ContentCopy,
-                                        contentDescription = "Copy this clip",
+                                        contentDescription = "复制此条",
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
@@ -144,7 +144,7 @@ fun QueueSheet(
                                 ) {
                                     Icon(
                                         Icons.Filled.ArrowUpward,
-                                        contentDescription = "Move up",
+                                        contentDescription = "上移",
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
@@ -154,14 +154,14 @@ fun QueueSheet(
                                 ) {
                                     Icon(
                                         Icons.Filled.ArrowDownward,
-                                        contentDescription = "Move down",
+                                        contentDescription = "下移",
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
                                 IconButton(onClick = { onRemove(item.id) }) {
                                     Icon(
                                         Icons.Outlined.Close,
-                                        contentDescription = "Remove from queue",
+                                        contentDescription = "移出队列",
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
@@ -184,14 +184,14 @@ fun QueueSheet(
                 ) {
                     Icon(Icons.Outlined.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text("Copy next")
+                    Text("复制下一条")
                 }
                 OutlinedButton(
                     onClick = onClear,
                     enabled = items.isNotEmpty(),
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Clear")
+                    Text("清除")
                 }
             }
         }

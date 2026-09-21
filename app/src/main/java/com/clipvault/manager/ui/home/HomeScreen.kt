@@ -197,7 +197,7 @@ fun HomeScreen(
                     hero.launch(pos, Offset(w - 160f, h - 280f))
                 }
             } else {
-                scope.launch { snackbarHostState.show("Locked clip — unlock it to copy") }
+                scope.launch { snackbarHostState.show("条目已锁定 — 解锁后才能复制") }
             }
         }
     }
@@ -221,13 +221,13 @@ fun HomeScreen(
                 is HomeEvent.SavedNew -> {
                     if (event.success) haptics.success() else haptics.light()
                     snackbarHostState.show(
-                        if (event.success) "Saved to clipboard history" else "Already in history"
+                        if (event.success) "已保存到剪贴板历史" else "已在历史中"
                     )
                 }
                 is HomeEvent.Deleted -> {
                     val result = snackbarHostState.show(
-                        message = "Clip deleted",
-                        actionLabel = "Undo",
+                        message = "条目已删除",
+                        actionLabel = "撤销",
                         durationMs = 4_000L
                     )
                     if (result != null) {
@@ -238,8 +238,8 @@ fun HomeScreen(
                 is HomeEvent.BulkDeleted -> {
                     haptics.heavy()
                     val result = snackbarHostState.show(
-                        message = "${event.clips.size} clips deleted",
-                        actionLabel = "Undo",
+                        message = "已删除 ${event.clips.size} 条",
+                        actionLabel = "撤销",
                         durationMs = 4_500L
                     )
                     if (result != null) {
@@ -248,19 +248,19 @@ fun HomeScreen(
                     }
                 }
                 is HomeEvent.ToggledPin -> {
-                    snackbarHostState.show(if (event.nowPinned) "Pinned to top" else "Unpinned")
+                    snackbarHostState.show(if (event.nowPinned) "已置顶" else "已取消置顶")
                 }
                 is HomeEvent.BulkPinned -> {
                     haptics.success()
-                    snackbarHostState.show("${event.count} clip${if (event.count == 1) "" else "s"} updated")
+                    snackbarHostState.show("已更新 ${event.count} 条")
                 }
                 HomeEvent.MonitoringPaused -> {
                     haptics.medium()
-                    snackbarHostState.show("Clipboard monitoring paused — existing entries are safe")
+                    snackbarHostState.show("剪贴板监控已暂停 — 现有条目不受影响")
                 }
                 HomeEvent.MonitoringResumed -> {
                     haptics.light()
-                    snackbarHostState.show("Clipboard monitoring resumed")
+                    snackbarHostState.show("剪贴板监控已恢复")
                 }
             }
         }
@@ -355,7 +355,7 @@ fun HomeScreen(
                 // During the first load — and right after an insert
                 // invalidates the PagingSource (e.g. autosave-on-open) —
                 // itemCount reads 0 while data is in flight; declaring empty
-                // here flashed "Nothing copied yet" over a non-empty history
+                // here flashed "还没有复制内容" over a non-empty history
                 // until the user toggled a filter chip.
                 val refreshState = lazyClips.loadState.refresh
                 val showEmpty = state.pinnedClips.isEmpty() &&
@@ -363,8 +363,8 @@ fun HomeScreen(
                     refreshState is LoadState.NotLoading
              if (showEmpty) {
                 EmptyStateWithOrb(
-                    title = "Nothing copied yet",
-                    subtitle = "Copy text anywhere — it shows up here.\nShake to clear history · long-press to multi-select.",
+                    title = "还没有复制内容",
+                    subtitle = "在任意处复制文本，都会出现在这里。\n摇一摇可清空历史 · 长按可多选。",
                     modifier = Modifier
                 )
             } else {
@@ -381,7 +381,7 @@ fun HomeScreen(
                 ) {
                     if (state.pinnedClips.isNotEmpty()) {
                         item(key = "header_pinned", contentType = "header") {
-                            DateSectionHeader("Pinned")
+                            DateSectionHeader("置顶")
                         }
                         items(
                             items = state.pinnedClips,
@@ -474,16 +474,16 @@ fun HomeScreen(
     if (showClearDialog) {
         androidx.compose.material3.AlertDialog(
             onDismissRequest = { showClearDialog = false },
-            title = { Text("Clear all history?") },
-            text = { Text("This removes every saved clip (pinned items are kept).") },
+            title = { Text("清空全部历史？") },
+            text = { Text("将删除全部已保存条目（置顶项会保留）。") },
             confirmButton = {
                 androidx.compose.material3.TextButton(onClick = {
                     scope.launch { viewModel.deleteAll() }
                     showClearDialog = false
-                }) { Text("Clear") }
+                }) { Text("清除") }
             },
             dismissButton = {
-                androidx.compose.material3.TextButton(onClick = { showClearDialog = false }) { Text("Cancel") }
+                androidx.compose.material3.TextButton(onClick = { showClearDialog = false }) { Text("取消") }
             }
         )
     }
@@ -498,7 +498,7 @@ fun HomeScreen(
                     ClipUtils.copyToClipboard(context, item.content, item.imageUri)
                     viewModel.recordUsage(item.id)
                 } else {
-                    scope.launch { snackbarHostState.show("Locked clip — unlock it to copy") }
+                    scope.launch { snackbarHostState.show("条目已锁定 — 解锁后才能复制") }
                 }
             },
             onCopyNext = {
@@ -509,7 +509,7 @@ fun HomeScreen(
                         ClipUtils.copyToClipboard(context, item.content, item.imageUri)
                         viewModel.recordUsage(item.id)
                     } else {
-                        scope.launch { snackbarHostState.show("Locked clip — unlock it to copy") }
+                        scope.launch { snackbarHostState.show("条目已锁定 — 解锁后才能复制") }
                     }
                 }
                 scope.launch { viewModel.advanceQueue() }
@@ -685,9 +685,9 @@ private fun NormalTopBar(
         scrollBehavior = scrollBehavior,
         title = {
             Column {
-                Text("Clipboard", style = MaterialTheme.typography.titleLarge)
+                Text("剪贴板", style = MaterialTheme.typography.titleLarge)
                 Text(
-                    text = "$count saved · ${if (monitoringActive) "live" else "paused"}",
+                    text = "已保存 $count 条 · ${if (monitoringActive) "监控中" else "已暂停"}",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -697,7 +697,7 @@ private fun NormalTopBar(
             IconButton(onClick = onOpenQueue) {
                 Icon(
                     imageVector = Icons.Outlined.Queue,
-                    contentDescription = "Paste queue",
+                    contentDescription = "粘贴队列",
                     tint = if (queueSize > 0) MaterialTheme.colorScheme.primary
                     else MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -705,7 +705,7 @@ private fun NormalTopBar(
             IconButton(onClick = onToggleMonitoring) {
                 Icon(
                     imageVector = if (monitoringActive) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
-                    contentDescription = if (monitoringActive) "Pause monitoring" else "Resume monitoring",
+                    contentDescription = if (monitoringActive) "暂停监控" else "恢复监控",
                     tint = if (monitoringActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -730,13 +730,13 @@ private fun MultiSelectTopBar(
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             IconButton(onClick = onClose) {
-                Icon(Icons.Outlined.Close, contentDescription = "Exit selection")
+                Icon(Icons.Outlined.Close, contentDescription = "退出多选")
             }
         },
-        title = { Text("$selectedCount selected", style = MaterialTheme.typography.titleLarge) },
+        title = { Text("已选中 $selectedCount 项", style = MaterialTheme.typography.titleLarge) },
         actions = {
             TextButton(onClick = onSelectAll) {
-                Text(if (selectedCount == totalCount) "Clear" else "All", style = MaterialTheme.typography.titleMedium)
+                Text(if (selectedCount == totalCount) "清除" else "全部", style = MaterialTheme.typography.titleMedium)
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
@@ -767,7 +767,7 @@ private fun NormalClipCard(
             .combinedClickable(onClick = onClick, onLongClick = onLongPress)
             .semantics {
                 role = Role.Button
-                contentDescription = "Clip: ${clip.preview}"
+                contentDescription = "条目：${clip.preview}"
             },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -798,7 +798,7 @@ private fun NormalClipCard(
                 if (bmp != null) {
                     androidx.compose.foundation.Image(
                         bitmap = bmp.asImageBitmap(),
-                        contentDescription = "Image clip, copied ${formatTime(clip.createdAt)}",
+                        contentDescription = "图片条目，复制于 ${formatTime(clip.createdAt)}",
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(112.dp)
@@ -828,7 +828,7 @@ private fun NormalClipCard(
                 ) {
                     Icon(
                         imageVector = if (clip.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Favorite",
+                        contentDescription = "收藏",
                         tint = if (clip.isFavorite) MaterialTheme.colorScheme.error
                         else MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(18.dp)
@@ -842,7 +842,7 @@ private fun NormalClipCard(
                 ) {
                     Icon(
                         imageVector = if (clip.isPinned) Icons.Filled.PushPin else Icons.Outlined.PushPin,
-                        contentDescription = "Pin",
+                        contentDescription = "置顶",
                         tint = if (clip.isPinned) MaterialTheme.colorScheme.primary
                         else MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(18.dp)
@@ -866,7 +866,7 @@ private fun NormalClipCard(
                     )
                     if (clip.hasExpiration) {
                         Text(
-                            text = "⏳ ${formatRemaining(clip.expiresAt!!)}",
+                            text = "⏳ ${formatRemaining(clip.expiresAt!!)}后删除",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.tertiary
                         )
@@ -888,7 +888,7 @@ private fun NormalClipCard(
                     ) {
                         Icon(
                             Icons.Outlined.Delete,
-                            contentDescription = "Delete",
+                            contentDescription = "删除",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(18.dp)
                         )
@@ -934,7 +934,7 @@ private fun NormalClipCard(
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            "Copy code · $code",
+                            "复制验证码 · $code",
                             style = MaterialTheme.typography.titleSmall
                         )
                     }
@@ -962,7 +962,7 @@ private fun FilterChipRow(
         FilterChip(
             selected = favoritesOnly,
             onClick = { onFavoritesChange(!favoritesOnly) },
-            label = { Text("Favorites") },
+            label = { Text("收藏") },
             leadingIcon = {
                 Icon(
                     imageVector = if (favoritesOnly) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
@@ -978,7 +978,7 @@ private fun FilterChipRow(
         FilterChip(
             selected = activeFilter == null,
             onClick = { onFilterChange(null) },
-            label = { Text("All") },
+            label = { Text("全部") },
             colors = FilterChipDefaults.filterChipColors(
                 selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
                 selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -1009,12 +1009,12 @@ private fun FilterChipRow(
 
 private fun formatRemaining(expiresAt: Long): String {
     val diff = expiresAt - System.currentTimeMillis()
-    if (diff <= 0) return "now"
+    if (diff <= 0) return "已到期"
     val minutes = diff / 60_000
     return when {
-        minutes < 60 -> "${minutes}m"
-        minutes < 24 * 60 -> "${minutes / 60}h"
-        else -> "${minutes / (24 * 60)}d"
+        minutes < 60 -> "${minutes} 分"
+        minutes < 24 * 60 -> "${minutes / 60} 小时"
+        else -> "${minutes / (24 * 60)} 天"
     }
 }
 
@@ -1035,10 +1035,10 @@ private fun headerForClip(clip: Clip): String? {
     val startOfYesterday = startOfToday - 86_400_000L
     val startOfWeek = startOfToday - (cal.get(java.util.Calendar.DAY_OF_WEEK) - 1) * 86_400_000L
     return when {
-        clip.createdAt >= startOfToday -> "Today"
-        clip.createdAt >= startOfYesterday -> "Yesterday"
-        clip.createdAt >= startOfWeek -> "This Week"
-        else -> "Older"
+        clip.createdAt >= startOfToday -> "今天"
+        clip.createdAt >= startOfYesterday -> "昨天"
+        clip.createdAt >= startOfWeek -> "本周"
+        else -> "更早"
     }
 }
 

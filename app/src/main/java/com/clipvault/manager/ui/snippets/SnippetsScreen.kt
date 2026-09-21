@@ -76,7 +76,7 @@ fun SnippetsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Snippets") },
+                title = { Text("片段") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 )
@@ -86,7 +86,7 @@ fun SnippetsScreen(
             ExtendedFloatingActionButton(
                 onClick = { haptics.medium(); viewModel.openEditor() },
                 icon = { Icon(Icons.Outlined.Add, contentDescription = null) },
-                text = { Text("New snippet") }
+                text = { Text("新建片段") }
             )
         }
     ) { padding ->
@@ -101,7 +101,7 @@ fun SnippetsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 8.dp),
-                placeholder = { Text("Search snippets") },
+                placeholder = { Text("搜索片段") },
                 shape = RoundedCornerShape(28.dp),
                 leadingIcon = { Icon(Icons.Outlined.Search, contentDescription = null) },
                 trailingIcon = {
@@ -111,7 +111,7 @@ fun SnippetsScreen(
                         exit = fadeOut()
                     ) {
                         IconButton(onClick = { viewModel.setQuery("") }) {
-                            Icon(Icons.Outlined.Close, contentDescription = "Clear search")
+                            Icon(Icons.Outlined.Close, contentDescription = "清除搜索")
                         }
                     }
                 },
@@ -121,14 +121,14 @@ fun SnippetsScreen(
                 state.snippets.isEmpty() && state.query.isBlank() ->
                     EmptyHint(
                         icon = Icons.Outlined.ContentPaste,
-                        title = "No snippets yet",
-                        subtitle = "Save reusable text — emails, addresses, replies."
+                        title = "还没有片段",
+                        subtitle = "保存可重复使用的文本，例如邮件、地址、常用回复。"
                     )
                 state.snippets.isEmpty() ->
                     EmptyHint(
                         icon = Icons.Outlined.Search,
-                        title = "No matches",
-                        subtitle = "Nothing found for \"${state.query}\"."
+                        title = "无匹配结果",
+                        subtitle = "没有找到与「${state.query}」相关的内容。"
                     )
                 else -> {
                     LazyColumn(
@@ -175,16 +175,16 @@ fun SnippetsScreen(
     pendingDelete?.let { snippet ->
         AlertDialog(
             onDismissRequest = { pendingDelete = null },
-            title = { Text("Delete snippet?") },
-            text = { Text("\"${snippet.title}\" will be removed.") },
+            title = { Text("删除片段？") },
+            text = { Text("「${snippet.title}」将被移除。") },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.delete(snippet)
                     pendingDelete = null
-                }) { Text("Delete") }
+                }) { Text("删除") }
             },
             dismissButton = {
-                TextButton(onClick = { pendingDelete = null }) { Text("Cancel") }
+                TextButton(onClick = { pendingDelete = null }) { Text("取消") }
             }
         )
     }
@@ -221,14 +221,14 @@ private fun SnippetCard(
                 IconButton(onClick = onDelete) {
                     Icon(
                         Icons.Outlined.Delete,
-                        contentDescription = "Delete",
+                        contentDescription = "删除",
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 IconButton(onClick = onEdit) {
                     Icon(
                         Icons.Outlined.Edit,
-                        contentDescription = "Edit",
+                        contentDescription = "编辑",
                         tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -246,7 +246,7 @@ private fun SnippetCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "${snippet.useCount} use${if (snippet.useCount == 1) "" else "s"}",
+                    text = "已使用 ${snippet.useCount} 次",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -257,7 +257,7 @@ private fun SnippetCard(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(Modifier.size(6.dp))
-                    Text("Insert")
+                    Text("插入")
                 }
             }
         }
@@ -277,13 +277,13 @@ private fun SnippetEditorDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initial == null) "New snippet" else "Edit snippet") },
+        title = { Text(if (initial == null) "新建片段" else "编辑片段") },
         text = {
             Column {
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    label = { Text("Title") },
+                    label = { Text("标题") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -291,7 +291,7 @@ private fun SnippetEditorDialog(
                 OutlinedTextField(
                     value = content,
                     onValueChange = { content = it },
-                    label = { Text("Content") },
+                    label = { Text("内容") },
                     placeholder = { Text("Hi {{name}}, meeting {{date+3}} at {{time:HH:mm}}") },
                     minLines = 4,
                     modifier = Modifier.fillMaxWidth()
@@ -306,11 +306,11 @@ private fun SnippetEditorDialog(
         },
         confirmButton = {
             TextButton(enabled = canSave, onClick = { onSave(title, content) }) {
-                Text("Save")
+                Text("保存")
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text("取消") }
         }
     )
 }
