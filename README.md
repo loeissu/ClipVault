@@ -61,8 +61,15 @@
 
 ## 下载
 
-请到本仓库或上游的 [**Releases**](https://github.com/bilboo00/ClipVault/releases) 获取 APK。  
-汉化版请优先使用本 fork 的 Releases（若有）。
+请到本仓库 **Releases** 下载汉化版 APK：
+
+- **[v1.2.1-zh](https://github.com/loeissu/ClipVault/releases/tag/v1.2.1-zh)**  
+  - `ClipVault-zh-v1.2.1-zh.apk`（固定签名，汉化版之间可覆盖安装）  
+  - `app-release.apk`（同构建产物的通用文件名）
+
+上游原版：[bilboo00/ClipVault Releases](https://github.com/bilboo00/ClipVault/releases)。
+
+由 GitHub Actions 工作流 `Build ZH release APK` 自动打包；也可在 Actions 页手动 **Run workflow**。
 
 ## 从源码构建
 
