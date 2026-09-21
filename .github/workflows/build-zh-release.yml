@@ -18,7 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      # 固定签名（密钥随仓库发布，便于覆盖安装；社区 fork 常用方案）
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      # 固定签名（密钥随仓库发布，便于覆盖安装）
       KEYSTORE_FILE: android-keystore/release.keystore
       STORE_PASSWORD: clipvault-zh-2026
       KEY_ALIAS: clipvault-zh
@@ -33,11 +35,35 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Accept Android licenses
-        run: yes | sdkmanager --licenses || true
+      - name: Prepare Android SDK licenses
+        run: |
+          set -euo pipefail
+          SDK="${ANDROID_HOME}"
+          echo "Using SDK at ${SDK}"
+          ls -la "${SDK}" || true
+          mkdir -p "${SDK}/licenses"
+          # 预接受常用 SDK 许可证（避免 sdkmanager 交互提示）
+          printf '\n24333f8a63b6825ea9c5514f83c2829b004d1fee\n' > "${SDK}/licenses/android-sdk-license"
+          printf '\n84831b9409646a918e30573bab4c9c91346d8abd\n' > "${SDK}/licenses/android-sdk-preview-license"
+          printf '\n33b6a2b64607f11b759f320ef9dff4ae5c47d97a\n' > "${SDK}/licenses/android-sdk-arm-dbt-license"
+          printf '\n8933bad161af4178b1185d1a37fbf41ea5269c55\n' > "${SDK}/licenses/android-googletv-license"
+          printf '\nd975f751698a77b662f1254ddbeed3901e976f5a\n' > "${SDK}/licenses/intel-android-extra-license"
+          printf '\n601085b94cd77f0b54ff86406957099ebe79c4d6\n' > "${SDK}/licenses/android-sdk-arm-dbt-license"
+          SDKMGR="${SDK}/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "${SDKMGR}" ]; then
+            # 部分镜像路径不同，尝试查找
+            SDKMGR="$(find "${SDK}" -name sdkmanager -type f 2>/dev/null | head -1 || true)"
+          fi
+          echo "sdkmanager=${SDKMGR}"
+          if [ -n "${SDKMGR}" ]; then
+            yes | "${SDKMGR}" --sdk_root="${SDK}" --licenses || true
+            yes | "${SDKMGR}" --sdk_root="${SDK}" \
+              "platform-tools" \
+              "platforms;android-34" \
+              "build-tools;34.0.0" || true
+          fi
+          echo "ANDROID_HOME=${SDK}" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=${SDK}" >> "$GITHUB_ENV"
 
       - name: Resolve version
         id: ver
@@ -47,11 +73,9 @@ jobs:
           else
             TAG="v$(grep -oP 'versionName = "\K[^"]+' app/build.gradle.kts | head -1)-zh-dev"
           fi
-          VER="${TAG#v}"
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
-          echo "version=${VER}" >> "$GITHUB_OUTPUT"
           echo "apk_name=ClipVault-zh-${TAG}.apk" >> "$GITHUB_OUTPUT"
-          echo "Resolved tag=${TAG} version=${VER}"
+          echo "Resolved tag=${TAG}"
 
       - name: Write signing config
         run: |
@@ -64,7 +88,7 @@ jobs:
             } > local.properties
             echo "Using fixed release keystore"
           else
-            echo "Keystore missing — will fall back to debug signing"
+            echo "Keystore missing — debug signing fallback"
           fi
 
       - name: Build release APK
@@ -78,7 +102,6 @@ jobs:
           cp "$SRC" "$DST"
           ls -lh "$SRC" "$DST"
           echo "APK_PATH=$DST" >> "$GITHUB_ENV"
-          echo "APK_NAME=${{ steps.ver.outputs.apk_name }}" >> "$GITHUB_ENV"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
